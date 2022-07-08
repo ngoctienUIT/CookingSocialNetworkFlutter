@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "384700154843",
+    "project_id": "cooking-social-network-flutter",
+    "storage_bucket": "cooking-social-network-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384700154843:android:2ea77c093cf469ac971dfe",
+        "android_client_info": {
+          "package_name": "com.example.cooking_social_network"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384700154843-eeu5k67sbqa55gh0qhaq3bavg4k01ajg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cooking_social_network",
+            "certificate_hash": "70dd73f0551eaf9237676467f332f605535d9a10"
+          }
+        },
+        {
+          "client_id": "384700154843-9nbmdtpkr3oia2tf35cef66iifcrcrg9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1fp_GRF0PwnbpAcesRF4Qb3XE01RCwzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384700154843-9nbmdtpkr3oia2tf35cef66iifcrcrg9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
