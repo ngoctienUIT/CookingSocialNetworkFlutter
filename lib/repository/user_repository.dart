@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/model/info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum UserState {
@@ -71,7 +75,7 @@ class UserRepository {
     return FirebaseAuth.instance.currentUser != null;
   }
 
-  static void initData() async {
+  static Future initData(Info infoUser) async {
     Map<String, dynamic> user = {
       "favourites": [],
       "followers": [],
@@ -85,17 +89,37 @@ class UserRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .set(user);
 
+    final upload = FirebaseStorage.instance.ref().child(
+        "avatar/${FirebaseAuth.instance.currentUser!.email.toString()}.png");
+
+    await upload.putFile(File(infoUser.avatar));
+    final linkAvatar = await upload.getDownloadURL();
+
     Map<String, dynamic> info = {
-      "avatar": "",
-      "birthday": "",
-      "description": "",
-      "gender": "",
-      "name": ""
+      "avatar": linkAvatar,
+      "birthday": infoUser.birthday,
+      "description": infoUser.description,
+      "gender": infoUser.gender,
+      "name": infoUser.name
     };
 
     await FirebaseFirestore.instance
         .collection("info")
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .set(info);
+  }
+
+  static Future<bool> checkInfo() async {
+    bool check = false;
+    await FirebaseFirestore.instance
+        .collection("info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((value) {
+      if (value.exists) {
+        check = true;
+      }
+    });
+    return check;
   }
 }

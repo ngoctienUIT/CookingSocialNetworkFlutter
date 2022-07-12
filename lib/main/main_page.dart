@@ -2,13 +2,13 @@ import 'package:cooking_social_network/main/home/home_page.dart';
 import 'package:cooking_social_network/main/notify/notify_page.dart';
 import 'package:cooking_social_network/main/profile/profile_page.dart';
 import 'package:cooking_social_network/main/search/search_page.dart';
-import 'package:cooking_social_network/post/post_page/post_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -17,6 +17,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
+  DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +40,20 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: customBottomAppBar(),
-      body: SafeArea(
-          child: PageView.builder(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
-        itemCount: 4,
-        itemBuilder: (context, index) => getPage(),
-      )),
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: SafeArea(
+            child: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+          itemCount: 4,
+          itemBuilder: (context, index) => getPage(),
+        )),
+      ),
     );
   }
 
@@ -106,5 +110,16 @@ class _MainPageState extends State<MainPage> {
         size: 30,
       ),
     );
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: "Nhấn thêm lần nữa để thoát");
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }

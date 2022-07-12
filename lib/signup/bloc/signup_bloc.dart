@@ -12,7 +12,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         var result = await UserRepository.createUserWithEmailAndPassword(
             email: event.username, password: event.password);
         if (result == UserState.success) {
-          UserRepository.initData();
           emit(SignupSuccess());
         } else {
           emit(SignupFaile());

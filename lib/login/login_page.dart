@@ -1,3 +1,4 @@
+import 'package:cooking_social_network/enter/enter_information/enter_information.dart';
 import 'package:cooking_social_network/login/bloc/login_bloc.dart';
 import 'package:cooking_social_network/login/bloc/login_event.dart';
 import 'package:cooking_social_network/login/bloc/login_state.dart';
@@ -42,11 +43,21 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           if (state is LoginSuccess) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainPage()),
-              );
+            SchedulerBinding.instance.addPostFrameCallback((_) async {
+              final check = await UserRepository.checkInfo();
+              if (!mounted) return;
+              if (check) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainPage()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EnterInformation()),
+                );
+              }
             });
           } else if (state is LoginFaile) {
             SchedulerBinding.instance.addPostFrameCallback((_) {

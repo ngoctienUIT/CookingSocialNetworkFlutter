@@ -5,7 +5,9 @@ import 'package:cooking_social_network/enter/enter_information/page/enter_gender
 import 'package:cooking_social_network/enter/enter_information/page/enter_name.dart';
 import 'package:cooking_social_network/main/main_page.dart';
 import 'package:cooking_social_network/model/info.dart';
+import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class EnterInformation extends StatefulWidget {
   const EnterInformation({Key? key}) : super(key: key);
@@ -26,8 +28,10 @@ class _EnterInformationState extends State<EnterInformation> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
+          onPressed: () async {
             if (_currentPage == 0) {
+              await UserRepository.logout();
+              if (!mounted) return;
               Navigator.of(context).pop();
             } else {
               setState(() {
@@ -78,19 +82,23 @@ class _EnterInformationState extends State<EnterInformation> {
     );
   }
 
-  void nextPage(Info newData) {
+  void nextPage(Info newData) async {
+    info = newData;
     if (_currentPage < 4) {
       setState(() {
-        info = newData;
         _currentPage++;
         _pageController.animateToPage(_currentPage,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut);
       });
     } else {
+      EasyLoading.show();
+      await UserRepository.initData(info);
+      EasyLoading.dismiss();
+      if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
+        MaterialPageRoute(builder: (context) => MainPage()),
       );
     }
   }
