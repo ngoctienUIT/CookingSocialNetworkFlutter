@@ -1,7 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-enum UserState { userNotFound, wrongPassword, success, error }
+enum UserState {
+  userNotFound,
+  wrongPassword,
+  success,
+  weakPassword,
+  emailUse,
+  error
+}
 
 class UserRepository {
   static Future<UserState> signInWithEmailPassword(
@@ -15,6 +23,8 @@ class UserRepository {
       } else if (e.code == 'wrong-password') {
         return UserState.wrongPassword;
       }
+    } catch (_) {
+      return UserState.error;
     }
     return UserState.success;
   }
@@ -26,12 +36,12 @@ class UserRepository {
           email: email.trim(), password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        return UserState.weakPassword;
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        return UserState.emailUse;
       }
-    } catch (e) {
-      print(e);
+    } catch (_) {
+      return UserState.error;
     }
     return UserState.success;
   }
@@ -59,5 +69,33 @@ class UserRepository {
 
   static bool isSignIn() {
     return FirebaseAuth.instance.currentUser != null;
+  }
+
+  static void initData() async {
+    Map<String, dynamic> user = {
+      "favourites": [],
+      "followers": [],
+      "following": [],
+      "notify": [],
+      "post": [],
+    };
+
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .set(user);
+
+    Map<String, dynamic> info = {
+      "avatar": "",
+      "birthday": "",
+      "description": "",
+      "gender": "",
+      "name": ""
+    };
+
+    await FirebaseFirestore.instance
+        .collection("info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .set(info);
   }
 }

@@ -9,12 +9,18 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   SignupBloc() : super(SignupInitial()) {
     on<SignupWithEmailPasswordSubmitted>((event, emit) async {
       try {
-        await UserRepository.createUserWithEmailAndPassword(
+        var result = await UserRepository.createUserWithEmailAndPassword(
             email: event.username, password: event.password);
-        emit(SignupSuccess());
+        if (result == UserState.success) {
+          UserRepository.initData();
+          emit(SignupSuccess());
+        } else {
+          emit(SignupFaile());
+        }
       } catch (_) {
         emit(SignupFaile());
       }
     });
+    on<SignupInitialEvent>((event, emit) => emit(SignupInitial()));
   }
 }

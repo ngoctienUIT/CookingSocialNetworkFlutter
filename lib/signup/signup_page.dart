@@ -1,5 +1,8 @@
+import 'package:cooking_social_network/enter/enter_information/enter_information.dart';
 import 'package:cooking_social_network/signup/bloc/signup_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupPage extends StatefulWidget {
@@ -24,6 +27,22 @@ class _SignupPageState extends State<SignupPage> {
       create: (context) => SignupBloc(),
       child: BlocBuilder<SignupBloc, SignupState>(
         builder: (context, state) {
+          if (state is SignupSuccess) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              // setState(() {
+              //   _emailController.text = "";
+              //   _passwodController.text = "";
+              //   _repasswodController.text = "";
+              // });
+              // BlocProvider.of<SignupBloc>(context).add(SignupInitialEvent());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EnterInformation(),
+                ),
+              );
+            });
+          }
           return Scaffold(
             body: SafeArea(
               child: Form(
@@ -141,9 +160,10 @@ class _SignupPageState extends State<SignupPage> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   BlocProvider.of<SignupBloc>(context).add(
-                                      SignupWithEmailPasswordSubmitted(
-                                          username: _emailController.text,
-                                          password: _passwodController.text));
+                                    SignupWithEmailPasswordSubmitted(
+                                        username: _emailController.text,
+                                        password: _passwodController.text),
+                                  );
                                 }
                               },
                               style: ButtonStyle(

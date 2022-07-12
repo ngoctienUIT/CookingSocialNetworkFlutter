@@ -17,3 +17,5 @@ class SignupWithEmailPasswordSubmitted extends SignupEvent {
   @override
   List<Object> get props => [username, password];
 }
+
+class SignupInitialEvent extends SignupEvent {}
