@@ -89,11 +89,16 @@ class UserRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .set(user);
 
-    final upload = FirebaseStorage.instance.ref().child(
-        "avatar/${FirebaseAuth.instance.currentUser!.email.toString()}.png");
+    String linkAvatar =
+        "https://firebasestorage.googleapis.com/v0/b/cooking-social-network-flutter.appspot.com/o/avatar%2Fcooking.png?alt=media&token=29e94202-4a5a-40db-b7de-543bd53621a6";
 
-    await upload.putFile(File(infoUser.avatar));
-    final linkAvatar = await upload.getDownloadURL();
+    if (infoUser.avatar != '') {
+      final upload = FirebaseStorage.instance.ref().child(
+          "avatar/${FirebaseAuth.instance.currentUser!.email.toString()}.png");
+
+      await upload.putFile(File(infoUser.avatar));
+      linkAvatar = await upload.getDownloadURL();
+    }
 
     Map<String, dynamic> info = {
       "avatar": linkAvatar,

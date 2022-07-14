@@ -2,13 +2,13 @@ import 'package:cooking_social_network/main/home/home_page.dart';
 import 'package:cooking_social_network/main/notify/notify_page.dart';
 import 'package:cooking_social_network/main/profile/profile_page.dart';
 import 'package:cooking_social_network/main/search/search_page.dart';
-import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/post/post_page/post_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key}) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -29,13 +29,12 @@ class _MainPageState extends State<MainPage> {
           size: 25,
         ),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => const PostPage(),
-          //   ),
-          // );
-          UserRepository.logout();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PostPage(),
+            ),
+          );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

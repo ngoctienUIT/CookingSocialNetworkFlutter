@@ -8,6 +8,7 @@ import 'package:cooking_social_network/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwodController = TextEditingController();
+  bool checkEmail = true;
+  bool checkPassword = true;
 
   @override
   void initState() {
@@ -47,10 +50,11 @@ class _LoginPageState extends State<LoginPage> {
               final check = await UserRepository.checkInfo();
               if (!mounted) return;
               if (check) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainPage()),
-                );
+                EasyLoading.dismiss();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainPage()),
+                    (route) => false);
               } else {
                 Navigator.push(
                   context,
@@ -90,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(30),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           const SizedBox(
                             height: 50,
                             child: Text(
@@ -103,74 +105,45 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.blue),
                             ),
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Material(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (text) {
+                          const SizedBox(height: 50),
+                          loginInput(
+                              hintText: "Email",
+                              action: (text) {
                                 final regularExpression = RegExp(
                                     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$');
-                                return regularExpression.hasMatch(text!)
-                                    ? null
-                                    : "Không đúng";
+                                setState(() {
+                                  checkEmail = regularExpression.hasMatch(text)
+                                      ? true
+                                      : false;
+                                });
                               },
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: "Email",
-                                prefixIcon: Icon(Icons.person_outline_rounded),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Material(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: TextFormField(
+                              controller: _emailController,
+                              show: true),
+                          showError(checkEmail, "Không đúng"),
+                          const SizedBox(height: 20),
+                          loginInput(
+                              hintText: "Password",
+                              action: (text) {
+                                checkPassword = text.length > 6 ? true : false;
+                              },
                               controller: _passwodController,
-                              obscureText: true,
-                              validator: (text) {
-                                return text!.length > 6
-                                    ? null
-                                    : "Password không đủ mạnh";
-                              },
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: "Password",
-                                prefixIcon: Icon(Icons.lock_outline_rounded),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
+                              show: false),
+                          showError(checkPassword, "Password không đủ mạnh"),
+                          const SizedBox(height: 30),
                           SizedBox(
                             height: 45,
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  BlocProvider.of<LoginBloc>(context).add(
+                                  if (checkEmail && checkPassword) {
+                                    EasyLoading.show();
+                                    BlocProvider.of<LoginBloc>(context).add(
                                       LoginWithEmailPasswordSubmitted(
                                           username: _emailController.text,
-                                          password: _passwodController.text));
+                                          password: _passwodController.text),
+                                    );
+                                  }
                                 }
                               },
                               style: ButtonStyle(
@@ -191,9 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: const Text("Login"),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
                             child: const Text(
@@ -201,75 +172,29 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(color: Colors.tealAccent),
                             ),
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
+                          const SizedBox(height: 50),
                           const Text("hoặc kết nối với"),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.google,
-                                    size: 25,
-                                  ),
-                                  label: const Text("Google"),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blueGrey),
-                                    padding: MaterialStateProperty.all(
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () {
+                              loginButton(
+                                  icon: FontAwesomeIcons.google,
+                                  color: Colors.blueGrey,
+                                  text: "Google",
+                                  action: () {
                                     BlocProvider.of<LoginBloc>(context)
                                         .add(LoginWithGoogleSubmitted());
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.facebook,
-                                    size: 25,
-                                  ),
-                                  label: const Text("Facebook"),
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.blue),
-                                    padding: MaterialStateProperty.all(
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                    ),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    UserRepository.logout();
-                                  },
-                                ),
-                              ),
+                                  }),
+                              const SizedBox(width: 20),
+                              loginButton(
+                                  icon: FontAwesomeIcons.facebook,
+                                  color: Colors.blue,
+                                  text: "Facebook",
+                                  action: () {}),
                             ],
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
+                          const SizedBox(height: 50),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -290,9 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          )
+                          const SizedBox(height: 10)
                         ],
                       ),
                     ),
@@ -304,5 +227,79 @@ class _LoginPageState extends State<LoginPage> {
         },
       ),
     );
+  }
+
+  Expanded loginButton(
+      {required IconData icon,
+      required String text,
+      required Color color,
+      required Function action}) {
+    return Expanded(
+      child: ElevatedButton.icon(
+        icon: FaIcon(
+          icon,
+          size: 25,
+        ),
+        label: Text(text),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(color),
+          padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(vertical: 10),
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        onPressed: () async {
+          action();
+        },
+      ),
+    );
+  }
+
+  Material loginInput(
+      {required String hintText,
+      required Function(String) action,
+      required TextEditingController controller,
+      required bool show}) {
+    return Material(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: TextFormField(
+        controller: controller,
+        obscureText: !show,
+        validator: (text) {
+          setState(() {
+            action(text!);
+          });
+          return null;
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          hintText: hintText,
+          prefixIcon: const Icon(Icons.lock_outline_rounded),
+        ),
+      ),
+    );
+  }
+
+  Widget showError(bool check, String text) {
+    if (check) {
+      return const SizedBox.shrink();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.red, fontSize: 12),
+        ),
+      );
+    }
   }
 }

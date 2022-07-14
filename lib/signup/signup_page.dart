@@ -1,6 +1,5 @@
 import 'package:cooking_social_network/enter/enter_information/enter_information.dart';
 import 'package:cooking_social_network/signup/bloc/signup_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,9 +58,7 @@ class _SignupPageState extends State<SignupPage> {
                       padding: const EdgeInsets.all(30),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           const SizedBox(
                             height: 50,
                             child: Text(
@@ -72,9 +69,7 @@ class _SignupPageState extends State<SignupPage> {
                                   color: Colors.blue),
                             ),
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
+                          const SizedBox(height: 50),
                           Material(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -100,9 +95,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           Material(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -125,9 +118,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           Material(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
@@ -150,9 +141,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 30,
-                          ),
+                          const SizedBox(height: 30),
                           SizedBox(
                             height: 45,
                             width: double.infinity,
@@ -184,9 +173,7 @@ class _SignupPageState extends State<SignupPage> {
                               child: const Text("Sign up"),
                             ),
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
+                          const SizedBox(height: 50),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -202,9 +189,7 @@ class _SignupPageState extends State<SignupPage> {
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          )
+                          const SizedBox(height: 10)
                         ],
                       ),
                     ),

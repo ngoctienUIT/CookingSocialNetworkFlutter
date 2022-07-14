@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class EnterDescription extends StatelessWidget {
   EnterDescription({Key? key, required this.nextPage, required this.info})
       : super(key: key);
-  Function(Info) nextPage;
-  Info info;
+  final Function(Info) nextPage;
+  final Info info;
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -19,13 +19,9 @@ class EnterDescription extends StatelessWidget {
               "Tên của bạn là gì?",
               style: TextStyle(fontSize: 30),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             const Text("Tôi có thể gọi bạn là gì?"),
-            const SizedBox(
-              height: 100,
-            ),
+            const SizedBox(height: 100),
             Padding(
               padding: const EdgeInsets.all(15),
               child: TextFormField(

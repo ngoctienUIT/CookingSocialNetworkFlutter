@@ -3,10 +3,10 @@ import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 
 class EnterBirthday extends StatefulWidget {
-  EnterBirthday({Key? key, required this.nextPage, required this.info})
+  const EnterBirthday({Key? key, required this.nextPage, required this.info})
       : super(key: key);
-  Function(Info) nextPage;
-  Info info;
+  final Function(Info) nextPage;
+  final Info info;
 
   @override
   State<EnterBirthday> createState() => _EnterBirthdayState();
@@ -24,13 +24,9 @@ class _EnterBirthdayState extends State<EnterBirthday> {
             "Ngày sinh của bạn?",
             style: TextStyle(fontSize: 30),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           const Text("Chúng tôi sẽ không bao giờ quên nó"),
-          const SizedBox(
-            height: 100,
-          ),
+          const SizedBox(height: 100),
           InkWell(
             onTap: (() async {
               DateTime newDate = await showDatePicker(

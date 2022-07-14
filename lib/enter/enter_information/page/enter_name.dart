@@ -7,8 +7,8 @@ class EnterName extends StatelessWidget {
       : super(key: key);
   final TextEditingController _nameController = TextEditingController();
 
-  Function(Info) nextPage;
-  Info info;
+  final Function(Info) nextPage;
+  final Info info;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,9 @@ class EnterName extends StatelessWidget {
               "Tên của bạn là gì?",
               style: TextStyle(fontSize: 30),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             const Text("Tôi có thể gọi bạn là gì?"),
-            const SizedBox(
-              height: 100,
-            ),
+            const SizedBox(height: 100),
             Padding(
               padding: const EdgeInsets.all(15),
               child: TextFormField(

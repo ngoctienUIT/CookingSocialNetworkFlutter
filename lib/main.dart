@@ -43,8 +43,9 @@ class MyApp extends StatelessWidget {
       ),
       home: AnimatedSplashScreen(
         splash: Image.asset("assets/images/cooking.png"),
-        nextScreen:
-            UserRepository.isSignIn() ? MainPage() : const OnboardingPage(),
+        nextScreen: UserRepository.isSignIn()
+            ? const MainPage()
+            : const OnboardingPage(),
         backgroundColor: Colors.red,
         splashTransition: SplashTransition.fadeTransition,
         splashIconSize: 350,

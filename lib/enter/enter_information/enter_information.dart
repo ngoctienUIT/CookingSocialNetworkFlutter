@@ -96,10 +96,10 @@ class _EnterInformationState extends State<EnterInformation> {
       await UserRepository.initData(info);
       EasyLoading.dismiss();
       if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MainPage()),
+          (route) => false);
     }
   }
 }

@@ -3,10 +3,10 @@ import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 
 class EnterGender extends StatefulWidget {
-  EnterGender({Key? key, required this.nextPage, required this.info})
+  const EnterGender({Key? key, required this.nextPage, required this.info})
       : super(key: key);
-  Function(Info) nextPage;
-  Info info;
+  final Function(Info) nextPage;
+  final Info info;
 
   @override
   State<EnterGender> createState() => _EnterGenderState();
@@ -24,13 +24,9 @@ class _EnterGenderState extends State<EnterGender> {
             "Giới tính của bạn là gì?",
             style: TextStyle(fontSize: 30),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           const Text("Tôi có thể gọi bạn là gì?"),
-          const SizedBox(
-            height: 100,
-          ),
+          const SizedBox(height: 100),
           Center(
             child: SizedBox(
               width: 200,

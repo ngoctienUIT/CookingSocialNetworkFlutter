@@ -8,10 +8,10 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AvatarPicker extends StatefulWidget {
-  AvatarPicker({Key? key, required this.nextPage, required this.info})
+  const AvatarPicker({Key? key, required this.nextPage, required this.info})
       : super(key: key);
-  Function(Info) nextPage;
-  Info info;
+  final Function(Info) nextPage;
+  final Info info;
 
   @override
   State<AvatarPicker> createState() => _AvatarPickerState();
@@ -46,13 +46,9 @@ class _AvatarPickerState extends State<AvatarPicker> {
             "Chọn ảnh đại diện của bạn?",
             style: TextStyle(fontSize: 30),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           const Text("Tôi có thể gọi bạn là gì?"),
-          const SizedBox(
-            height: 50,
-          ),
+          const SizedBox(height: 50),
           InkWell(
               onTap: () {
                 pickImage();
@@ -81,11 +77,11 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   ),
                 ],
               )),
-          const SizedBox(
-            height: 50,
-          ),
+          const SizedBox(height: 50),
           enterButton("Hoàn thành", () {
-            widget.info.avatar = image!.path;
+            if (image != null) {
+              widget.info.avatar = image!.path;
+            }
             widget.nextPage(widget.info);
           })
         ],
