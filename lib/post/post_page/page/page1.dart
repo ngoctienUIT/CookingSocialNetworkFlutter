@@ -36,68 +36,81 @@ class _Page1State extends State<Page1> {
   Widget build(BuildContext context) {
     return Form(
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                "Tên món ăn",
-                style: textStyle(),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(color: Colors.red),
+              width: double.infinity,
+              child: const Text(
+                "Một công thức mới ư? Hãy bắt đầu nào",
+                style: TextStyle(fontSize: 16),
               ),
-              TextFormField(
-                controller: _namecontroller,
-                onChanged: (text) {
-                  widget.post.nameFood = text;
-                },
-                decoration: const InputDecoration(hintText: "Gà rán"),
-              ),
-              const SizedBox(height: 30),
-              Text(
-                "Hình ảnh món ăn",
-                style: textStyle(),
-              ),
-              const SizedBox(height: 20),
-              images.isNotEmpty
-                  ? SizedBox(
-                      height: 300,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          PageView.builder(
-                            onPageChanged: (value) {
-                              setState(() {
-                                currentPage = value;
-                              });
-                            },
-                            itemCount: images.length,
-                            itemBuilder: (context, index) => Image.file(
-                              File(images[index]),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Row(
-                              children: List.generate(images.length,
-                                  (index) => buildDot(index: index)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      pickImage();
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    "Tên món ăn",
+                    style: textStyle(),
+                  ),
+                  TextFormField(
+                    controller: _namecontroller,
+                    onChanged: (text) {
+                      widget.post.nameFood = text;
                     },
-                    icon: const Icon(FontAwesomeIcons.image),
-                    label: const Text("Thêm hình ảnh")),
-              )
-            ],
-          ),
+                    decoration: const InputDecoration(hintText: "Gà rán"),
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    "Hình ảnh món ăn",
+                    style: textStyle(),
+                  ),
+                  const SizedBox(height: 20),
+                  images.isNotEmpty
+                      ? SizedBox(
+                          height: 300,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              PageView.builder(
+                                onPageChanged: (value) {
+                                  setState(() {
+                                    currentPage = value;
+                                  });
+                                },
+                                itemCount: images.length,
+                                itemBuilder: (context, index) => Image.file(
+                                  File(images[index]),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Row(
+                                  children: List.generate(images.length,
+                                      (index) => buildDot(index: index)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          pickImage();
+                        },
+                        icon: const Icon(FontAwesomeIcons.image),
+                        label: const Text("Thêm hình ảnh")),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

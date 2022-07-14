@@ -66,7 +66,11 @@ class _PostPageState extends State<PostPage> {
                         .doc("abcde")
                         .set(post.toMap());
                   },
-                  child: const Text("Đăng"))
+                  child: const Text(
+                    "Đăng",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
               : IconButton(
                   onPressed: () {
                     setState(() {
@@ -81,22 +85,51 @@ class _PostPageState extends State<PostPage> {
         ],
         title: Text(
           "Post Page $_currentPage",
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
+        child: Column(
           children: [
-            Page1(post: post),
-            Page2(post: post),
-            const Page3(),
-            Page4(),
-            const Page5()
+            SizedBox(
+              height: 3,
+              child: Row(
+                children: List.generate(
+                    5, (index) => Expanded(child: buildDot(index: index))),
+              ),
+            ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                // physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  Page1(post: post),
+                  Page2(post: post),
+                  const Page3(),
+                  Page4(),
+                  const Page5()
+                ],
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Container buildDot({required int index}) {
+    return Container(
+      height: 3,
+      margin: const EdgeInsets.only(right: 5),
+      decoration: BoxDecoration(
+        color: _currentPage == index ? Colors.blue : Colors.transparent,
+        borderRadius: BorderRadius.circular(3),
       ),
     );
   }
