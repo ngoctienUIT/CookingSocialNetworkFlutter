@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  duration_picker:
+    dependency: "direct main"
+    description:
+      name: duration_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -464,6 +471,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.11.1"
   plugin_platform_interface:
     dependency: transitive
     description:

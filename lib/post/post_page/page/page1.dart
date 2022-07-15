@@ -14,7 +14,7 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
-  final List<String> images = [];
+  List<String> images = [];
   final TextEditingController _namecontroller = TextEditingController();
 
   int currentPage = 0;
@@ -34,6 +34,8 @@ class _Page1State extends State<Page1> {
 
   @override
   Widget build(BuildContext context) {
+    _namecontroller.text = widget.post.nameFood;
+    images = widget.post.images;
     return Form(
       child: SingleChildScrollView(
         child: Column(

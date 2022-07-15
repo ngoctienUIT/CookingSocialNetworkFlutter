@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
+import 'package:cooking_social_network/model/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -93,11 +93,8 @@ class UserRepository {
         "https://firebasestorage.googleapis.com/v0/b/cooking-social-network-flutter.appspot.com/o/avatar%2Fcooking.png?alt=media&token=29e94202-4a5a-40db-b7de-543bd53621a6";
 
     if (infoUser.avatar != '') {
-      final upload = FirebaseStorage.instance.ref().child(
-          "avatar/${FirebaseAuth.instance.currentUser!.email.toString()}.png");
-
-      await upload.putFile(File(infoUser.avatar));
-      linkAvatar = await upload.getDownloadURL();
+      linkAvatar = await uploadImage(infoUser.avatar, "avatar",
+          FirebaseAuth.instance.currentUser!.email.toString());
     }
 
     Map<String, dynamic> info = {
@@ -126,5 +123,31 @@ class UserRepository {
       }
     });
     return check;
+  }
+
+  static Future<String> uploadImage(
+      String link, String folder, String uuid) async {
+    final upload = FirebaseStorage.instance.ref().child("$folder/$uuid");
+
+    await upload.putFile(File(link));
+    return await upload.getDownloadURL();
+  }
+
+  static Future posts(Post post) async {
+    List<String> imageList = [];
+    var firestore = FirebaseFirestore.instance.collection("post").doc();
+    for (int i = 0; i < post.images.length; i++) {
+      String link = await uploadImage(
+          post.images[i], "post/${firestore.id}", i.toString());
+      imageList.add(link);
+    }
+    post.images = imageList;
+
+    for (int i = 0; i < post.methods.length; i++) {
+      String link = await uploadImage(
+          post.methods[i].image, "method/${firestore.id}", i.toString());
+      post.methods[i].image = link;
+    }
+    firestore.set(post.toMap());
   }
 }

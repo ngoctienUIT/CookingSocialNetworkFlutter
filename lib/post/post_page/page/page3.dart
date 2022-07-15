@@ -1,16 +1,18 @@
 import 'package:cooking_social_network/model/ingredient.dart';
+import 'package:cooking_social_network/model/post.dart';
 import 'package:flutter/material.dart';
 
 class Page3 extends StatefulWidget {
-  const Page3({Key? key}) : super(key: key);
+  const Page3({Key? key, required this.post}) : super(key: key);
+  final Post post;
 
   @override
   State<Page3> createState() => _Page3State();
 }
 
 class _Page3State extends State<Page3> {
-  final List<Ingredient> ingredients = [];
-  final List<String> itemIngredients = [
+  List<Ingredient> ingredients = [];
+  final List<String> unitIngredients = [
     "Teaspoon",
     "Tablespoon",
     "Desertspoon",
@@ -28,10 +30,20 @@ class _Page3State extends State<Page3> {
 
   @override
   Widget build(BuildContext context) {
+    ingredients = widget.post.ingredients;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(color: Colors.red),
+            width: double.infinity,
+            child: const Text(
+              "Một công thức mới ư? Hãy bắt đầu nào",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.all(20),
             child: Text(
@@ -45,7 +57,10 @@ class _Page3State extends State<Page3> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ListView.builder(
                     itemCount: ingredients.length,
-                    itemBuilder: (context, index) => itemIngredient(),
+                    itemBuilder: (context, index) => itemIngredient(
+                        name: ingredients[index].name,
+                        amount: ingredients[index].amount,
+                        unit: ingredients[index].unit),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                   ),
@@ -58,10 +73,6 @@ class _Page3State extends State<Page3> {
             child: ElevatedButton.icon(
                 onPressed: () {
                   showBottomSheet(context);
-                  // setState(() {
-                  //   ingredients
-                  //       .add(Ingredient(amount: 0, name: "name", unit: "unit"));
-                  // });
                 },
                 icon: const Icon(Icons.add_rounded),
                 label: const Text("Thêm nguyên liệu")),
@@ -71,19 +82,30 @@ class _Page3State extends State<Page3> {
     );
   }
 
-  Row itemIngredient() {
-    return Row(
-      children: const [
-        Expanded(child: TextField()),
-        SizedBox(width: 20),
-        SizedBox(width: 50, child: TextField()),
-        SizedBox(width: 20),
-        SizedBox(width: 50, child: TextField())
-      ],
+  Padding itemIngredient(
+      {required String name, required int amount, required String unit}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      child: Row(
+        children: [
+          Expanded(child: Text(name)),
+          const Spacer(),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [Text("$amount"), const SizedBox(width: 5), Text(unit)],
+            ),
+          )
+        ],
+      ),
     );
   }
 
   void showBottomSheet(BuildContext context) {
+    TextEditingController ingredientController = TextEditingController();
+    TextEditingController amountController = TextEditingController();
+    String unit = unitIngredients.first;
+
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -91,11 +113,21 @@ class _Page3State extends State<Page3> {
         context: context,
         builder: (context) {
           return Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Form(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      height: 6,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                    ),
+                  ),
                   const Center(
                     child: Text(
                       "Thêm nguyên liệu",
@@ -103,12 +135,18 @@ class _Page3State extends State<Page3> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
+                  const Divider(
+                    thickness: 0.5,
+                    color: Colors.black,
+                  ),
                   const SizedBox(height: 20),
                   const Text(
                     "Nguyên liệu:",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  TextFormField(),
+                  TextFormField(
+                    controller: ingredientController,
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
@@ -121,7 +159,9 @@ class _Page3State extends State<Page3> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
-                            TextFormField(keyboardType: TextInputType.number)
+                            TextFormField(
+                                controller: amountController,
+                                keyboardType: TextInputType.number)
                           ],
                         ),
                       ),
@@ -138,7 +178,7 @@ class _Page3State extends State<Page3> {
                             DropdownButtonFormField<String>(
                                 menuMaxHeight: 200,
                                 value: "Teaspoon",
-                                items: itemIngredients
+                                items: unitIngredients
                                     .map(
                                       (item) => DropdownMenuItem(
                                         value: item,
@@ -146,16 +186,28 @@ class _Page3State extends State<Page3> {
                                       ),
                                     )
                                     .toList(),
-                                onChanged: (name) {})
+                                onChanged: (name) {
+                                  unit = name!;
+                                })
                           ],
                         ),
                       )
                     ],
                   ),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          ingredients.add(Ingredient(
+                              amount: int.parse(amountController.text),
+                              name: ingredientController.text,
+                              unit: unit));
+                          widget.post.ingredients = ingredients;
+                        });
+                        Navigator.pop(context);
+                      },
                       child: const Text("Thêm"),
                     ),
                   )

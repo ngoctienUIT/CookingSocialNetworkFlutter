@@ -9,12 +9,13 @@ class Post {
   List<Ingredient> ingredients;
   List<Method> methods;
   String description;
-  String cookingTime;
   String nameFood;
   String owner;
   String servers;
   double level;
   int share;
+  int cookingTime;
+  DateTime time;
 
   Post(
       {required this.comments,
@@ -28,7 +29,8 @@ class Post {
       required this.level,
       required this.owner,
       required this.servers,
-      required this.share});
+      required this.share,
+      required this.time});
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,7 +46,8 @@ class Post {
       "owner": owner,
       "servers": servers,
       "level": "level",
-      "share": share
+      "share": share,
+      "time": DateTime.now()
     };
   }
 }

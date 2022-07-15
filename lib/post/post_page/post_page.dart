@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/post_page/page/page1.dart';
 import 'package:cooking_social_network/post/post_page/page/page2.dart';
 import 'package:cooking_social_network/post/post_page/page/page3.dart';
 import 'package:cooking_social_network/post/post_page/page/page4.dart';
 import 'package:cooking_social_network/post/post_page/page/page5.dart';
+import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({Key? key}) : super(key: key);
@@ -23,12 +25,13 @@ class _PostPageState extends State<PostPage> {
       ingredients: [],
       methods: [],
       description: "",
-      cookingTime: "",
+      cookingTime: 0,
       nameFood: "",
       level: 0.0,
-      owner: "",
+      owner: FirebaseAuth.instance.currentUser!.email.toString(),
       servers: "",
-      share: 0);
+      share: 0,
+      time: DateTime.now());
   final PageController _pageController = PageController();
 
   @override
@@ -38,9 +41,23 @@ class _PostPageState extends State<PostPage> {
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
             if (_currentPage == 0) {
-              Navigator.pop(context);
+              bool exit = false;
+              await showDialog(
+                context: context,
+                builder: (ctxt) => newDialog(action1: () {
+                  exit = false;
+                  Navigator.pop(context);
+                }, action2: () {
+                  exit = true;
+                  Navigator.pop(context);
+                }),
+              );
+              if (exit) {
+                if (!mounted) return;
+                Navigator.pop(context);
+              }
             } else {
               setState(() {
                 _currentPage--;
@@ -60,11 +77,13 @@ class _PostPageState extends State<PostPage> {
         actions: [
           _currentPage == 4
               ? TextButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection("post")
-                        .doc("abcde")
-                        .set(post.toMap());
+                  onPressed: () async {
+                    EasyLoading.show();
+                    await UserRepository.posts(post);
+                    EasyLoading.showSuccess("Thành công");
+                    EasyLoading.dismiss();
+                    if (!mounted) return;
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     "Đăng",
@@ -83,40 +102,121 @@ class _PostPageState extends State<PostPage> {
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
                 ),
         ],
-        title: Text(
-          "Post Page $_currentPage",
-          style: const TextStyle(color: Colors.black),
+        title: const Text(
+          "Tạo công thức mới",
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
+      body: WillPopScope(
+        onWillPop: () async {
+          if (_currentPage == 0) {
+            bool exit = false;
+            await showDialog(
+              context: context,
+              builder: (ctxt) => newDialog(action1: () {
+                exit = false;
+                Navigator.pop(context);
+              }, action2: () {
+                exit = true;
+                Navigator.pop(context);
+              }),
+            );
+            if (exit) {
+              return Future.value(true);
+            } else {
+              return Future.value(false);
+            }
+          } else {
+            setState(() {
+              _currentPage--;
+              _pageController.animateToPage(_currentPage,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut);
+            });
+            return Future.value(false);
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 3,
+                child: Row(
+                  children: List.generate(
+                      5, (index) => Expanded(child: buildDot(index: index))),
+                ),
+              ),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  // physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Page1(post: post),
+                    Page2(post: post),
+                    Page3(post: post),
+                    Page4(post: post),
+                    Page5(post: post)
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Dialog newDialog({required Function action1, required Function action2}) {
+    return Dialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        width: 150,
+        height: 150,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 3,
-              child: Row(
-                children: List.generate(
-                    5, (index) => Expanded(child: buildDot(index: index))),
-              ),
+            const Text(
+              "Thoát?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                // physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  Page1(post: post),
-                  Page2(post: post),
-                  const Page3(),
-                  Page4(),
-                  const Page5()
-                ],
-              ),
+            const SizedBox(height: 10),
+            const Text(
+              "Bạn thật sự muốn thoát?",
+              style: TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          action1();
+                        },
+                        child: const Text(
+                          "No",
+                          style: TextStyle(fontSize: 16),
+                        ))),
+                Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          action2();
+                        },
+                        child: const Text(
+                          "Yes",
+                          style: TextStyle(fontSize: 16),
+                        )))
+              ],
+            )
           ],
         ),
       ),
