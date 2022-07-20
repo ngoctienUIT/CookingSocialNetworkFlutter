@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/login/login_page.dart';
+import 'package:cooking_social_network/main/profile/widget/itemFollow.dart';
+import 'package:cooking_social_network/main/profile/widget/listPost.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
@@ -13,7 +15,16 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
@@ -21,18 +32,18 @@ class _ProfilePageState extends State<ProfilePage> {
             username: FirebaseAuth.instance.currentUser!.email.toString()),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return body(context: context, info: null);
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return body(context: context, info: null);
           }
           var info = Info.getDataFromSnapshot(snapshot: snapshot.requireData);
           return body(context: context, info: info);
         });
   }
 
-  Column body({required BuildContext context, required Info info}) {
+  Widget body({required BuildContext context, Info? info}) {
     return Column(
       children: [
         Material(
@@ -45,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Center(
                   child: Text(
-                    info.name,
+                    info == null ? "name" : info.name,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -69,71 +80,110 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
-        ClipOval(
-          child: Image.network(
-            info.avatar,
-            width: 150,
-            height: 150,
+        Expanded(
+          child: ListView(
+            children: [
+              const SizedBox(height: 10),
+              Column(
+                children: [
+                  ClipOval(
+                    child: info == null
+                        ? Image.asset("assets/images/cooking.png",
+                            width: 150, height: 150)
+                        : Image.network(info.avatar, width: 150, height: 150),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    info == null
+                        ? "@username"
+                        : FirebaseAuth.instance.currentUser!.email.toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: UserRepository.getDataUser(
+                          username: FirebaseAuth.instance.currentUser!.email
+                              .toString()),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return itemFollow(user: null);
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return itemFollow(user: null);
+                        }
+                        myuser.User user = myuser.User.getDataFromSnapshot(
+                            snapshot: snapshot.requireData);
+                        return itemFollow(user: user);
+                      }),
+                  const SizedBox(height: 5),
+                  ElevatedButton(
+                      onPressed: () {}, child: const Text("Edit Profile")),
+                  const SizedBox(height: 5),
+                  Text(info == null ? "mô ta" : info.description),
+                ],
+              ),
+              const Divider(
+                thickness: 1,
+                color: Color.fromARGB(255, 237, 232, 232),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: TabBar(
+                    controller: _tabController,
+                    labelColor: Colors.red,
+                    unselectedLabelColor: Colors.grey,
+                    isScrollable: true,
+                    indicatorColor: Colors.red,
+                    tabs: const [
+                      Tab(
+                        icon: Icon(Icons.apps_rounded),
+                      ),
+                      Tab(
+                        icon: Icon(Icons.favorite_rounded),
+                      ),
+                      Tab(
+                        icon: Icon(Icons.lock_outline_rounded),
+                      )
+                    ]),
+              ),
+              const Divider(
+                thickness: 1,
+                color: Color.fromARGB(255, 237, 232, 232),
+              ),
+              StreamBuilder<DocumentSnapshot>(
+                  stream: UserRepository.getDataUser(
+                      username:
+                          FirebaseAuth.instance.currentUser!.email.toString()),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text("Không có gì ở đây"),
+                      );
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: Text("Không có gì ở đây"),
+                      );
+                    }
+                    myuser.User user = myuser.User.getDataFromSnapshot(
+                        snapshot: snapshot.requireData);
+                    return Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: TabBarView(controller: _tabController, children: [
+                        listPost(user: user, index: 0),
+                        listPost(user: user, index: 1),
+                        listPost(user: user, index: 2)
+                      ]),
+                    );
+                  })
+            ],
           ),
         ),
-        const SizedBox(height: 10),
-        Text(
-          FirebaseAuth.instance.currentUser!.email.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        const SizedBox(height: 10),
-        StreamBuilder<DocumentSnapshot>(
-            stream: UserRepository.getDataUser(
-                username: FirebaseAuth.instance.currentUser!.email.toString()),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text('Something went wrong');
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading");
-              }
-              // bool checkLoading =
-              //     snapshot.connectionState == ConnectionState.waiting;
-              myuser.User user = myuser.User.getDataFromSnapshot(
-                  snapshot: snapshot.requireData);
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  itemProfile(user.following.length, "following"),
-                  const SizedBox(width: 20),
-                  itemProfile(user.followers.length, "follower"),
-                  const SizedBox(width: 20),
-                  itemProfile(user.post.length, "post")
-                ],
-              );
-            }),
-        const SizedBox(height: 5),
-        ElevatedButton(onPressed: () {}, child: const Text("Edit Profile")),
-        const SizedBox(height: 5),
-        const Text("mô ta"),
-        const Divider(
-          thickness: 1,
-          color: Color.fromARGB(255, 237, 232, 232),
-        ),
-        const Expanded(child: Text("abc"))
-      ],
-    );
-  }
-
-  Column itemProfile(int number, String text) {
-    return Column(
-      children: [
-        Text(
-          number.toString(),
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 15),
-        )
       ],
     );
   }
