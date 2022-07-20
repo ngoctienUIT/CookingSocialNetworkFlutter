@@ -1,7 +1,9 @@
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:flutter/material.dart';
 
-GridView listPost({required myuser.User user, required int index}) {
+import 'mini_post.dart';
+
+Widget listPost({required myuser.User user, required int index}) {
   List<dynamic> list;
   switch (index) {
     case 0:
@@ -15,33 +17,19 @@ GridView listPost({required myuser.User user, required int index}) {
       break;
   }
 
-  return GridView.builder(
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: list.length,
-    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-      maxCrossAxisExtent: 150,
-      crossAxisSpacing: 2,
-      mainAxisSpacing: 2,
-      childAspectRatio: 2 / 3,
-    ),
-    itemBuilder: (context, index) => Container(
-      decoration: const BoxDecoration(color: Colors.red),
-      child: Stack(children: [
-        Center(child: Image.asset("assets/images/cooking.png")),
-        Positioned(
-          right: 5,
-          bottom: 5,
-          child: Row(
-            children: const [
-              Icon(Icons.favorite_outline_rounded,
-                  color: Colors.white, size: 18),
-              Text("123", style: TextStyle(color: Colors.white)),
-            ],
+  return list.isEmpty
+      ? const Text("Không có gì ở đây")
+      : GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: list.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 150,
+            crossAxisSpacing: 2,
+            mainAxisSpacing: 2,
+            childAspectRatio: 2 / 3,
           ),
-        )
-      ]),
-    ),
-  );
+          itemBuilder: (context, index) => miniPost(id: list[index]),
+        );
 
   /*return GridView.count(
     physics: const NeverScrollableScrollPhysics(),

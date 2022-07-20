@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Page1 extends StatefulWidget {
-  Page1({Key? key, required this.post}) : super(key: key);
+  const Page1({Key? key, required this.post}) : super(key: key);
   final Post post;
 
   @override

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/login/login_page.dart';
-import 'package:cooking_social_network/main/profile/widget/itemFollow.dart';
-import 'package:cooking_social_network/main/profile/widget/listPost.dart';
+import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
+import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
@@ -166,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage>
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
-                        child: Text("Không có gì ở đây"),
+                        child: CircularProgressIndicator(),
                       );
                     }
                     myuser.User user = myuser.User.getDataFromSnapshot(

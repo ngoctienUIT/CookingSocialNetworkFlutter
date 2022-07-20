@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
-import 'package:cooking_social_network/model/user.dart';
+import 'package:cooking_social_network/model/user.dart' as myusser;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -150,6 +150,22 @@ class UserRepository {
       post.methods[i].image = link;
     }
     firestore.set(post.toMap());
+    addPostUser(firestore.id);
+  }
+
+  static void addPostUser(String id) {
+    FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((value) {
+      myusser.User user = myusser.User.getDataFromSnapshot(snapshot: value);
+      user.post.add(id);
+      FirebaseFirestore.instance
+          .collection("user")
+          .doc(FirebaseAuth.instance.currentUser!.email.toString())
+          .update({"post": user.post});
+    });
   }
 
   static Stream<DocumentSnapshot> getInfoUser({required String username}) {
@@ -157,7 +173,6 @@ class UserRepository {
         .collection("info")
         .doc(username)
         .snapshots();
-    // .map((data) => Info.getDataFromSnapshot(snapshot: data));
   }
 
   static Stream<DocumentSnapshot> getDataUser({required String username}) {
@@ -165,13 +180,6 @@ class UserRepository {
         .collection("user")
         .doc(username)
         .snapshots();
-    // .map((data) => User(
-    //     info: info,
-    //     favourites: favourites,
-    //     followers: followers,
-    //     following: following,
-    //     notify: notify,
-    //     post: post));
   }
 
   static Stream<DocumentSnapshot> getDataComment({required String id}) {

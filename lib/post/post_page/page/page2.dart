@@ -180,7 +180,8 @@ class _Page2State extends State<Page2> {
                 onTap: () async {
                   var time = await showDurationPicker(
                     context: context,
-                    initialTime: Duration(minutes: widget.post.cookingTime),
+                    initialTime: Duration(
+                        minutes: int.parse(widget.post.cookingTime.toString())),
                   );
                   if (time != null) {
                     setState(() {
