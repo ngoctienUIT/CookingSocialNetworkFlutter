@@ -1,19 +1,26 @@
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
-IntrinsicHeight reactFood({Post? post, required Function action}) {
+IntrinsicHeight reactFood(
+    {Post? post, required Function action, required bool check}) {
   return IntrinsicHeight(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: InkWell(
-            onTap: () {},
+            onTap: () async {
+              await PostRepository.favouriteEvent(id: post!.id);
+            },
             child: Column(
               children: [
-                const Icon(
-                  Icons.favorite_outline_rounded,
+                Icon(
+                  check
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_outline_rounded,
                   color: Colors.red,
                 ),
                 Text(post!.favourites.length.toString())
@@ -51,7 +58,9 @@ IntrinsicHeight reactFood({Post? post, required Function action}) {
         ),
         Expanded(
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Share.share(post.nameFood);
+            },
             child: Column(
               children: [
                 const Icon(

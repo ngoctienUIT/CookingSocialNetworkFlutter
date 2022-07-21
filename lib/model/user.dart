@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  List<dynamic> post;
-  List<dynamic> favourites;
-  List<dynamic> followers;
-  List<dynamic> following;
-  List<dynamic> notify;
+  List<String> post;
+  List<String> favourites;
+  List<String> followers;
+  List<String> following;
+  List<String> notify;
 
   User(
       {required this.favourites,
@@ -17,10 +17,20 @@ class User {
   factory User.getDataFromSnapshot({required DocumentSnapshot snapshot}) {
     var data = snapshot.data() as Map<String, dynamic>;
     return User(
-        favourites: data["favourites"],
-        followers: data["followers"],
-        following: data["following"],
-        notify: data["notify"],
-        post: data["post"]);
+        favourites: (data["favourites"] as List<dynamic>)
+            .map((favourite) => favourite.toString())
+            .toList(),
+        followers: (data["followers"] as List<dynamic>)
+            .map((follower) => follower.toString())
+            .toList(),
+        following: (data["following"] as List<dynamic>)
+            .map((follow) => follow.toString())
+            .toList(),
+        notify: (data["notify"] as List<dynamic>)
+            .map((noti) => noti.toString())
+            .toList(),
+        post: (data["post"] as List<dynamic>)
+            .map((posts) => posts.toString())
+            .toList());
   }
 }

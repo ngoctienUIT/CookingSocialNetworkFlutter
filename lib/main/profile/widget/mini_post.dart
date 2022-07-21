@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/view_post/view_post_page.dart';
-import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:flutter/material.dart';
 
 Widget miniPost({required String id}) {
   return StreamBuilder<DocumentSnapshot>(
-      stream: UserRepository.getDataPost(id: id),
+      stream: PostRepository.getDataPost(id: id),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text("data");

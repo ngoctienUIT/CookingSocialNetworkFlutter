@@ -5,10 +5,12 @@ import 'package:cooking_social_network/post/view_post/widget/react_food.dart';
 import 'package:flutter/material.dart';
 
 class InfoFoodPage extends StatelessWidget {
-  const InfoFoodPage({Key? key, this.post, required this.action})
+  const InfoFoodPage(
+      {Key? key, this.post, required this.action, required this.check})
       : super(key: key);
   final Post? post;
   final Function action;
+  final bool check;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,8 @@ class InfoFoodPage extends StatelessWidget {
                 post: post,
                 action: () {
                   action();
-                }),
+                },
+                check: check),
             const SizedBox(height: 20)
           ],
         ),

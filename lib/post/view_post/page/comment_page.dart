@@ -2,13 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 
-class CommentPage extends StatelessWidget {
-  CommentPage({Key? key, this.post}) : super(key: key);
+class CommentPage extends StatefulWidget {
+  const CommentPage({Key? key, this.post}) : super(key: key);
   final Post? post;
-  final TextEditingController _commentController = TextEditingController();
+
+  @override
+  State<CommentPage> createState() => _CommentPageState();
+}
+
+class _CommentPageState extends State<CommentPage> {
+  String comment = "";
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class CommentPage extends StatelessWidget {
         writeComment(),
         Expanded(
           child: ListView.builder(
-            itemCount: post!.comments.length,
+            itemCount: widget.post!.comments.length,
             itemBuilder: (context, index) => commentItem(index),
           ),
         )
@@ -30,7 +37,8 @@ class CommentPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       child: StreamBuilder<DocumentSnapshot>(
-          stream: UserRepository.getDataComment(id: post!.comments[index]),
+          stream:
+              PostRepository.getDataComment(id: widget.post!.comments[index]),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(
@@ -97,7 +105,8 @@ class CommentPage extends StatelessWidget {
     );
   }
 
-  Row writeComment() {
+  Widget writeComment() {
+    TextEditingController controller = TextEditingController();
     return Row(
       children: [
         const SizedBox(width: 10),
@@ -105,7 +114,7 @@ class CommentPage extends StatelessWidget {
           width: 45,
           height: 45,
           child: StreamBuilder<DocumentSnapshot>(
-              stream: UserRepository.getInfoUser(username: post!.owner),
+              stream: UserRepository.getInfoUser(username: widget.post!.owner),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Center(
@@ -123,22 +132,49 @@ class CommentPage extends StatelessWidget {
                 return ClipOval(child: Image.network(info.avatar));
               }),
         ),
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-              child: TextFormField(
-            controller: _commentController,
-            decoration: InputDecoration(
-                hintText: "Bình luận",
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                suffixIcon: IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.send_rounded)),
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)))),
-          )),
-        ))
+        StatefulBuilder(
+          builder: (context, setState) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  child: TextFormField(
+                    controller: comment.isEmpty ? controller : null,
+                    onChanged: (text) {
+                      setState(() {
+                        comment = text;
+                      });
+                    },
+                    decoration: InputDecoration(
+                        hintText: "Bình luận",
+                        fillColor: Colors.white,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        suffixIcon: comment.isEmpty
+                            ? null
+                            : IconButton(
+                                onPressed: () {
+                                  PostRepository.addComment(
+                                      id: widget.post!.id, content: comment);
+                                  setState(() {
+                                    comment = "";
+                                    controller.text = "";
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.send_rounded,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                        border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10)))),
+                  ),
+                ),
+              ),
+            );
+          },
+        )
       ],
     );
   }

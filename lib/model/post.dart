@@ -12,6 +12,7 @@ class Post {
   String nameFood;
   String owner;
   String servers;
+  String id;
   double level;
   int share;
   int cookingTime;
@@ -29,6 +30,7 @@ class Post {
       required this.level,
       required this.owner,
       required this.servers,
+      required this.id,
       required this.share,
       required this.time});
 
@@ -46,6 +48,7 @@ class Post {
       "owner": owner,
       "servers": servers,
       "level": level,
+      "id": id,
       "share": share,
       "time": DateTime.now()
     };
@@ -75,6 +78,7 @@ class Post {
         level: double.parse(data["level"].toString()),
         owner: data["owner"],
         servers: data["servers"],
+        id: data["id"],
         share: data["share"],
         time: (data["time"] as Timestamp).toDate());
   }

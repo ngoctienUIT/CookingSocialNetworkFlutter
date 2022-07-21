@@ -6,8 +6,9 @@ import 'package:cooking_social_network/post/view_post/page/method_page.dart';
 import 'package:flutter/material.dart';
 
 class InfoFood extends StatefulWidget {
-  const InfoFood({Key? key, this.post}) : super(key: key);
+  const InfoFood({Key? key, this.post, required this.check}) : super(key: key);
   final Post? post;
+  final bool check;
 
   @override
   State<InfoFood> createState() => _InfoFoodState();
@@ -52,6 +53,7 @@ class _InfoFoodState extends State<InfoFood> with TickerProviderStateMixin {
             widget.post == null
                 ? const Text("không có gì ở đây")
                 : InfoFoodPage(
+                    check: widget.check,
                     post: widget.post,
                     action: () {
                       _tabController.animateTo(3);

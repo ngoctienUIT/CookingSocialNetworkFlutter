@@ -4,7 +4,7 @@ import 'package:cooking_social_network/post/post_page/page/page2.dart';
 import 'package:cooking_social_network/post/post_page/page/page3.dart';
 import 'package:cooking_social_network/post/post_page/page/page4.dart';
 import 'package:cooking_social_network/post/post_page/page/page5.dart';
-import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -30,6 +30,7 @@ class _PostPageState extends State<PostPage> {
       level: 0.0,
       owner: FirebaseAuth.instance.currentUser!.email.toString(),
       servers: "",
+      id: "",
       share: 0,
       time: DateTime.now());
   final PageController _pageController = PageController();
@@ -79,7 +80,7 @@ class _PostPageState extends State<PostPage> {
               ? TextButton(
                   onPressed: () async {
                     EasyLoading.show();
-                    await UserRepository.posts(post);
+                    await PostRepository.posts(post);
                     EasyLoading.showSuccess("Thành công");
                     EasyLoading.dismiss();
                     if (!mounted) return;

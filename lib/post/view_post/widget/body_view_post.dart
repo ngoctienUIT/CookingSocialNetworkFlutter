@@ -1,9 +1,11 @@
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/view_post/widget/floating_button_icon.dart';
 import 'package:cooking_social_network/post/view_post/widget/info_food.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Scaffold bodyViewPost(BuildContext context, {Post? post}) {
+Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
   return Scaffold(
     body: SafeArea(
       child: Stack(
@@ -39,9 +41,12 @@ Scaffold bodyViewPost(BuildContext context, {Post? post}) {
                   floatingButtonIcon(context,
                       right: 10,
                       bottom: 25,
-                      iconData: Icons.favorite_border_rounded,
-                      iconColor: Colors.red,
-                      action: () {})
+                      iconData: check
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      iconColor: Colors.red, action: () async {
+                    await PostRepository.favouriteEvent(id: post!.id);
+                  })
                 ],
               ),
             ),
@@ -56,7 +61,7 @@ Scaffold bodyViewPost(BuildContext context, {Post? post}) {
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              child: InfoFood(post: post),
+              child: InfoFood(post: post, check: check),
             ),
           )
         ],
