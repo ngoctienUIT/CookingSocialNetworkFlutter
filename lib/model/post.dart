@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/ingredient.dart';
 import 'package:cooking_social_network/model/method.dart';
 
 class Post {
   List<String> favourites;
   List<String> images;
-  List<Comment> comments;
+  List<String> comments;
   List<Ingredient> ingredients;
   List<Method> methods;
   String description;
@@ -37,7 +36,7 @@ class Post {
     return {
       "favourites": favourites,
       "images": images,
-      "comments": comments.map((comment) => comment.toMap()).toList(),
+      "comments": comments,
       "ingredients":
           ingredients.map((ingredient) => ingredient.toMap()).toList(),
       "methods": methods.map((method) => method.toMap()).toList(),
@@ -56,7 +55,7 @@ class Post {
     var data = snapshot.data() as Map<String, dynamic>;
     return Post(
         comments: (data["comments"] as List<dynamic>)
-            .map((comment) => Comment.getDataFromMap(data: comment))
+            .map((comment) => comment.toString())
             .toList(),
         favourites: (data["favourites"] as List<dynamic>)
             .map((favourite) => favourite.toString())

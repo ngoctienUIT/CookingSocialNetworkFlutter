@@ -29,14 +29,12 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
   void _loadData() {
     _infoSubscription?.cancel();
     _infoSubscription = info.listen((user) {
-      print(user.name);
       add(UserDataFetchedSuccessEvent(info: user));
     });
   }
 
   @override
   Future<void> close() {
-    print("close");
     _infoSubscription?.cancel();
     return super.close();
   }

@@ -21,7 +21,8 @@ class Comment {
     };
   }
 
-  factory Comment.getDataFromMap({required Map<String, dynamic> data}) {
+  factory Comment.getDataFromMap({required DocumentSnapshot snapshot}) {
+    var data = snapshot.data() as Map<String, dynamic>;
     return Comment(
         favourites: (data["favourites"] as List<dynamic>)
             .map((favourite) => favourite.toString())

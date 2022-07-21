@@ -138,15 +138,9 @@ class _ProfilePageState extends State<ProfilePage>
                     isScrollable: true,
                     indicatorColor: Colors.red,
                     tabs: const [
-                      Tab(
-                        icon: Icon(Icons.apps_rounded),
-                      ),
-                      Tab(
-                        icon: Icon(Icons.favorite_rounded),
-                      ),
-                      Tab(
-                        icon: Icon(Icons.lock_outline_rounded),
-                      )
+                      Tab(icon: Icon(Icons.apps_rounded)),
+                      Tab(icon: Icon(Icons.favorite_rounded)),
+                      Tab(icon: Icon(Icons.lock_outline_rounded))
                     ]),
               ),
               const Divider(
