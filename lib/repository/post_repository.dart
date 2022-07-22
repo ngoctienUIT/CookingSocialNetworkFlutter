@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/post.dart';
@@ -135,5 +134,66 @@ class PostRepository {
           .doc(id)
           .update({"comments": post.comments});
     });
+  }
+
+  static Future<bool> checkFavouristComment({required String id}) async {
+    bool check = true;
+    await FirebaseFirestore.instance
+        .collection("comment")
+        .doc(id)
+        .get()
+        .then((snapshot) {
+      Comment comment = Comment.getDataFromMap(snapshot: snapshot);
+      check = comment.favourites
+          .contains(FirebaseAuth.instance.currentUser!.email.toString());
+    });
+    return check;
+  }
+
+  static Future favouristComment({required String id}) async {
+    List<String> favourist = [];
+    await FirebaseFirestore.instance
+        .collection("comment")
+        .doc(id)
+        .get()
+        .then((snapshot) {
+      Comment comment = Comment.getDataFromMap(snapshot: snapshot);
+      favourist = comment.favourites;
+    });
+
+    if (await checkFavouristComment(id: id)) {
+      favourist.remove(FirebaseAuth.instance.currentUser!.email.toString());
+    } else {
+      favourist.add(FirebaseAuth.instance.currentUser!.email.toString());
+    }
+
+    FirebaseFirestore.instance
+        .collection("comment")
+        .doc(id)
+        .update({"favourites": favourist});
+  }
+
+  static String daysBetween(
+      {required DateTime dateTime1, required DateTime dateTime2}) {
+    String time = "";
+    var dateTime = dateTime2.difference(dateTime1);
+    if (dateTime.inSeconds == 0) {
+      time = "Vừa xong";
+    } else if (dateTime.inSeconds < 60) {
+      time = "${dateTime.inSeconds} giây";
+    } else if (dateTime.inMinutes < 60) {
+      time = "${dateTime.inMinutes} phút";
+    } else if (dateTime.inHours < 24) {
+      time = "${dateTime.inHours} giờ";
+    } else if (dateTime.inDays < 7) {
+      time = "${dateTime.inDays} ngày";
+    } else if (dateTime.inDays < 30) {
+      time = "${dateTime.inDays / 7} tuần";
+    } else if (dateTime.inDays >= 30 && dateTime.inDays < 365) {
+      time = "${dateTime.inDays / 30} tháng";
+    } else if (dateTime.inDays >= 365) {
+      time = "${dateTime.inDays / 365} năm";
+    }
+    return time;
   }
 }

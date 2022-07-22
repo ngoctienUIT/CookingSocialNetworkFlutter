@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/profile/your_profile_page.dart';
+import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,8 @@ Widget infoOwner({Post? post}) {
                       );
                     },
                     child: Text(post.owner)),
-                Text("${post.time.minute} phút")
+                Text(PostRepository.daysBetween(
+                    dateTime1: post.time, dateTime2: DateTime.now()))
               ],
             )
           ],

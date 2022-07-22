@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/profile/your_profile_page.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CommentPage extends StatefulWidget {
@@ -54,6 +56,8 @@ class _CommentPageState extends State<CommentPage> {
 
             Comment comment =
                 Comment.getDataFromMap(snapshot: snapshot.requireData);
+            bool check = comment.favourites
+                .contains(FirebaseAuth.instance.currentUser!.email.toString());
             return StreamBuilder<DocumentSnapshot>(
                 stream: UserRepository.getInfoUser(username: comment.userName),
                 builder: (context, snapshot) {
@@ -72,31 +76,48 @@ class _CommentPageState extends State<CommentPage> {
                       Info.getDataFromSnapshot(snapshot: snapshot.requireData);
                   return Row(
                     children: [
-                      SizedBox(
-                          width: 45,
-                          height: 45,
-                          child: ClipOval(child: Image.network(info.avatar))),
+                      InkWell(
+                        onTap: () {
+                          toProfilePage(username: widget.post!.owner);
+                        },
+                        child: SizedBox(
+                            width: 45,
+                            height: 45,
+                            child: ClipOval(child: Image.network(info.avatar))),
+                      ),
                       const SizedBox(width: 20),
                       Expanded(
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            info.name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                          InkWell(
+                            onTap: () {
+                              toProfilePage(username: widget.post!.owner);
+                            },
+                            child: Text(
+                              info.name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
                           ),
                           Text(comment.content),
-                          Text(comment.time.minute.toString())
+                          Text(PostRepository.daysBetween(
+                              dateTime1: comment.time,
+                              dateTime2: DateTime.now()))
                         ],
                       )),
                       const SizedBox(width: 10),
                       IconButton(
-                        icon: const Icon(
-                          Icons.favorite_border_rounded,
+                        icon: Icon(
+                          check
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
                           color: Colors.red,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          PostRepository.favouristComment(
+                              id: widget.post!.comments[index]);
+                        },
                       ),
                     ],
                   );
@@ -109,7 +130,6 @@ class _CommentPageState extends State<CommentPage> {
     TextEditingController controller = TextEditingController();
     return Row(
       children: [
-        const SizedBox(width: 10),
         SizedBox(
           width: 45,
           height: 45,
@@ -136,7 +156,8 @@ class _CommentPageState extends State<CommentPage> {
           builder: (context, setState) {
             return Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Form(
                   child: TextFormField(
                     controller: comment.isEmpty ? controller : null,
@@ -176,6 +197,18 @@ class _CommentPageState extends State<CommentPage> {
           },
         )
       ],
+    );
+  }
+
+  Future toProfilePage({required String username}) async {
+    bool check = await UserRepository.checkFollow(username: widget.post!.owner);
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            YourProfilePage(userName: widget.post!.owner, check: check),
+      ),
     );
   }
 }

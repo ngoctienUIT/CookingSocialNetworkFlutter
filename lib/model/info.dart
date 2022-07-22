@@ -6,18 +6,15 @@ class Info {
   String birthday;
   String description;
   String avatar;
+  String username;
 
   Info(
       {required this.name,
       required this.birthday,
       required this.gender,
       required this.description,
-      required this.avatar});
-
-  @override
-  String toString() {
-    return "$name $birthday $gender $description $avatar";
-  }
+      required this.avatar,
+      required this.username});
 
   factory Info.getDataFromSnapshot({required DocumentSnapshot snapshot}) {
     var data = snapshot.data() as Map<String, dynamic>;
@@ -26,13 +23,7 @@ class Info {
         birthday: data["birthday"],
         gender: data["gender"],
         description: data["description"],
-        avatar: data["avatar"]);
-
-    // return Info(
-    //     name: "name",
-    //     birthday: "birthday",
-    //     gender: 0,
-    //     description: "description",
-    //     avatar: "avatar");
+        avatar: data["avatar"],
+        username: snapshot.id);
   }
 }

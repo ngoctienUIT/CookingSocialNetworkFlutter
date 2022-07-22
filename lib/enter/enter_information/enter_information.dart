@@ -19,8 +19,13 @@ class EnterInformation extends StatefulWidget {
 class _EnterInformationState extends State<EnterInformation> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
-  Info info =
-      Info(name: "", birthday: "", gender: 0, description: "", avatar: "");
+  Info info = Info(
+      name: "",
+      birthday: "",
+      gender: 0,
+      description: "",
+      avatar: "",
+      username: "");
 
   @override
   Widget build(BuildContext context) {

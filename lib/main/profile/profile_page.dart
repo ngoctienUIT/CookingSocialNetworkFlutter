@@ -130,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage>
                             snapshot: snapshot.requireData);
                         return itemFollow(user: user);
                       }),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   SizedBox(
                     width: 150,
                     height: 40,
@@ -153,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   Text(info == null ? "mô ta" : info.description),
                 ],
               ),
