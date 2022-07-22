@@ -19,16 +19,22 @@ Widget listPost({required myuser.User user, required int index}) {
 
   return list.isEmpty
       ? const Text("Không có gì ở đây")
-      : GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: list.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150,
-            crossAxisSpacing: 2,
-            mainAxisSpacing: 2,
-            childAspectRatio: 2 / 3,
+      : SizedBox(
+          height:
+              (list.length % 3 > 0 ? list.length / 3 + 1 : list.length / 3) *
+                  230,
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: list.length,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 150,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+              childAspectRatio: 2 / 3,
+            ),
+            itemBuilder: (context, index) => miniPost(id: list[index]),
           ),
-          itemBuilder: (context, index) => miniPost(id: list[index]),
         );
 
   /*return GridView.count(

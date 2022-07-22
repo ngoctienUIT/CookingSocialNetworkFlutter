@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
+import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -135,5 +136,61 @@ class UserRepository {
         .collection("user")
         .doc(username)
         .snapshots();
+  }
+
+  static Future<bool> checkFollow({required String username}) async {
+    bool check = true;
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((snapshot) {
+      myuser.User user = myuser.User.getDataFromSnapshot(snapshot: snapshot);
+      if (user.following.contains(username)) {
+        check = true;
+      } else {
+        check = false;
+      }
+    });
+    return check;
+  }
+
+  static Future followEvent({required String username}) async {
+    List<String> myFollow = [];
+    List<String> yourFollow = [];
+
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(username)
+        .get()
+        .then((snapshot) {
+      myuser.User user = myuser.User.getDataFromSnapshot(snapshot: snapshot);
+      yourFollow = user.followers;
+    });
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((snapshot) {
+      myuser.User user = myuser.User.getDataFromSnapshot(snapshot: snapshot);
+      myFollow = user.following;
+    });
+    if (await checkFollow(username: username)) {
+      yourFollow.remove(FirebaseAuth.instance.currentUser!.email.toString());
+      myFollow.remove(username);
+    } else {
+      yourFollow.add(FirebaseAuth.instance.currentUser!.email.toString());
+      myFollow.add(username);
+    }
+
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(username)
+        .update({"followers": yourFollow});
+
+    await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .update({"following": myFollow});
   }
 }

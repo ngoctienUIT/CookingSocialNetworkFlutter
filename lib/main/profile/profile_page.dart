@@ -4,8 +4,10 @@ import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
+import 'package:cooking_social_network/profile/your_profile_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -47,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage>
     return Column(
       children: [
         Material(
-          elevation: 0.5,
+          elevation: 1,
           child: Container(
             decoration: const BoxDecoration(),
             height: 55,
@@ -65,13 +67,23 @@ class _ProfilePageState extends State<ProfilePage>
                   right: 0,
                   child: TextButton(
                     onPressed: () async {
-                      await UserRepository.logout();
+                      // await UserRepository.logout();
+                      // if (!mounted) return;
+                      // Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const LoginPage()),
+                      //     (route) => false);
+                      bool check = await UserRepository.checkFollow(
+                          username: "ab123@gmail.com");
                       if (!mounted) return;
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                          (route) => false);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => YourProfilePage(
+                              userName: "ab123@gmail.com", check: check),
+                        ),
+                      );
                     },
                     child: const Icon(Icons.menu, color: Colors.black),
                   ),
@@ -119,8 +131,28 @@ class _ProfilePageState extends State<ProfilePage>
                         return itemFollow(user: user);
                       }),
                   const SizedBox(height: 5),
-                  ElevatedButton(
-                      onPressed: () {}, child: const Text("Edit Profile")),
+                  SizedBox(
+                    width: 150,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.resolveWith<OutlinedBorder>(
+                                  (_) {
+                            return RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: const BorderSide(
+                                    width: 1, color: Colors.black));
+                          }),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white)),
+                      child: const Text(
+                        "Edit Profile",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 5),
                   Text(info == null ? "mô ta" : info.description),
                 ],
@@ -165,8 +197,7 @@ class _ProfilePageState extends State<ProfilePage>
                     }
                     myuser.User user = myuser.User.getDataFromSnapshot(
                         snapshot: snapshot.requireData);
-                    return Container(
-                      width: double.maxFinite,
+                    return SizedBox(
                       height: double.maxFinite,
                       child: TabBarView(controller: _tabController, children: [
                         listPost(user: user, index: 0),

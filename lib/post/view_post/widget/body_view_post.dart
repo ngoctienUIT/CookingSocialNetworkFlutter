@@ -2,7 +2,6 @@ import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/view_post/widget/floating_button_icon.dart';
 import 'package:cooking_social_network/post/view_post/widget/info_food.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/profile/your_profile_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -24,22 +25,69 @@ Widget infoOwner({Post? post}) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ClipOval(
-              child: Image.network(
-                info.avatar,
-                width: 55,
+            InkWell(
+              onTap: () async {
+                bool check = await UserRepository.checkFollow(
+                    username: "ab123@gmail.com");
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YourProfilePage(
+                      userName: post.owner,
+                      check: check,
+                    ),
+                  ),
+                );
+              },
+              child: ClipOval(
+                child: Image.network(
+                  info.avatar,
+                  width: 55,
+                ),
               ),
             ),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  info.name,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                InkWell(
+                  onTap: () async {
+                    bool check = await UserRepository.checkFollow(
+                        username: "ab123@gmail.com");
+                    // ignore: use_build_context_synchronously
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => YourProfilePage(
+                          userName: post.owner,
+                          check: check,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    info.name,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                Text(post.owner),
+                InkWell(
+                    onTap: () async {
+                      bool check = await UserRepository.checkFollow(
+                          username: "ab123@gmail.com");
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => YourProfilePage(
+                            userName: post.owner,
+                            check: check,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(post.owner)),
                 Text("${post.time.minute} phút")
               ],
             )

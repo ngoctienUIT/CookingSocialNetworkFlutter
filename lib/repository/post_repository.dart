@@ -1,11 +1,10 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cooking_social_network/model/user.dart' as myusser;
+import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:firebase_storage/firebase_storage.dart';
 
 class PostRepository {
@@ -40,7 +39,7 @@ class PostRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .get()
         .then((snapshot) {
-      myusser.User user = myusser.User.getDataFromSnapshot(snapshot: snapshot);
+      myuser.User user = myuser.User.getDataFromSnapshot(snapshot: snapshot);
       favouritesUser = user.favourites;
     });
     if (await checkFavourite(id: id)) {
@@ -105,7 +104,7 @@ class PostRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .get()
         .then((value) {
-      myusser.User user = myusser.User.getDataFromSnapshot(snapshot: value);
+      myuser.User user = myuser.User.getDataFromSnapshot(snapshot: value);
       user.post.add(id);
       FirebaseFirestore.instance
           .collection("user")
