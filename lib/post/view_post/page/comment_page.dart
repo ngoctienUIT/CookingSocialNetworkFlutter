@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/info.dart';
@@ -7,6 +8,7 @@ import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({Key? key, this.post}) : super(key: key);
@@ -49,9 +51,7 @@ class _CommentPageState extends State<CommentPage> {
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return loadingComment();
             }
 
             Comment comment =
@@ -68,9 +68,7 @@ class _CommentPageState extends State<CommentPage> {
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return loadingComment();
                   }
                   Info info =
                       Info.getDataFromSnapshot(snapshot: snapshot.requireData);
@@ -107,22 +105,88 @@ class _CommentPageState extends State<CommentPage> {
                         ],
                       )),
                       const SizedBox(width: 10),
-                      IconButton(
-                        icon: Icon(
-                          check
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          PostRepository.favouristComment(
-                              id: widget.post!.comments[index]);
-                        },
+                      Column(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              check
+                                  ? Icons.favorite_rounded
+                                  : Icons.favorite_border_rounded,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              PostRepository.favouristComment(
+                                  id: widget.post!.comments[index]);
+                            },
+                          ),
+                          Text(comment.favourites.length.toString())
+                        ],
                       ),
                     ],
                   );
                 });
           }),
+    );
+  }
+
+  Widget loadingComment() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Row(
+        children: [
+          ClipOval(
+            child: Container(width: 45, height: 45, color: Colors.grey),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: Random().nextDouble() * 100 + 50,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  width: Random().nextDouble() * 150 + 50,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  width: Random().nextDouble() * 10 + 30,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              const Icon(Icons.favorite),
+              Container(
+                width: 20,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 

@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MethodPage extends StatelessWidget {
   const MethodPage({Key? key, this.post}) : super(key: key);
@@ -62,8 +66,12 @@ class MethodPage extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
-                        child: Image.network(post!.methods[index].image,
-                            width: 100),
+                        child: CachedNetworkImage(
+                          imageUrl: post!.methods[index].image,
+                          placeholder: (context, url) => imageLoading(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                     ),
                   ),
@@ -71,6 +79,21 @@ class MethodPage extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Shimmer imageLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: Random().nextDouble() * 200 + 100,
+        height: Random().nextDouble() * 150 + 100,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
     );
