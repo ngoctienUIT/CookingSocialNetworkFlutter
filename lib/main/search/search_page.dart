@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/main/search/page/all_search.dart';
+import 'package:cooking_social_network/main/search/page/post_search.dart';
 import 'package:cooking_social_network/main/search/page/user_search.dart';
 import 'package:cooking_social_network/main/search/search_view.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         Expanded(
             child: TabBarView(
           controller: _tabController,
-          children: [AllSearch(), UserSearch(query: search), Text("3")],
+          children: [
+            AllSearch(),
+            UserSearch(query: search),
+            PostSearch(query: search)
+          ],
         ))
       ],
     );

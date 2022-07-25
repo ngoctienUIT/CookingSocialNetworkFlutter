@@ -74,14 +74,13 @@ class _ProfilePageState extends State<ProfilePage>
                       //     MaterialPageRoute(
                       //         builder: (context) => const LoginPage()),
                       //     (route) => false);
-                      bool check = await UserRepository.checkFollow(
-                          username: "ab123@gmail.com");
+
                       if (!mounted) return;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => YourProfilePage(
-                              userName: "ab123@gmail.com", check: check),
+                          builder: (context) => const YourProfilePage(
+                              userName: "ab123@gmail.com"),
                         ),
                       );
                     },

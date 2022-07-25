@@ -200,14 +200,11 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Future toProfilePage({required String username}) async {
-    bool check = await UserRepository.checkFollow(username: widget.post!.owner);
-    if (!mounted) return;
+  void toProfilePage({required String username}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            YourProfilePage(userName: widget.post!.owner, check: check),
+        builder: (context) => YourProfilePage(userName: widget.post!.owner),
       ),
     );
   }

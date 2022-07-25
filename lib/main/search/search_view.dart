@@ -42,6 +42,7 @@ class SearchView extends SearchDelegate<String> {
 
   @override
   void showResults(BuildContext context) {
+    if (query != "") HistoryRepository.updateHistory(search: query);
     close(context, query);
   }
 
@@ -133,7 +134,7 @@ class SearchView extends SearchDelegate<String> {
         return ListView.builder(
           itemCount: listHistory.length,
           itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: InkWell(
               onTap: () {
                 query = listHistory[index];

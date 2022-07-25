@@ -41,70 +41,81 @@ class UserSearch extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => YourProfilePage(
-                            userName: listUser[index].username, check: true),
+                        builder: (context) =>
+                            YourProfilePage(userName: listUser[index].username),
                       ),
                     );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Row(
-                      children: [
-                        ClipOval(
-                            child: Image.network(listUser[index].avatar,
-                                width: 50)),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(listUser[index].name),
-                            Text(listUser[index].username)
-                          ],
-                        ),
-                        const Spacer(),
-                        StreamBuilder<DocumentSnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("user")
-                                .doc(FirebaseAuth.instance.currentUser!.email
-                                    .toString())
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return const Center(
-                                    child: Text("Không có gì ở đây"));
-                              }
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        children: [
+                          ClipOval(
+                              child: Image.network(listUser[index].avatar,
+                                  width: 50)),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(listUser[index].name),
+                              Text(listUser[index].username)
+                            ],
+                          ),
+                          const Spacer(),
+                          FirebaseAuth.instance.currentUser!.email.toString() ==
+                                  listUser[index].username
+                              ? const SizedBox.shrink()
+                              : StreamBuilder<DocumentSnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("user")
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.email
+                                          .toString())
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return const Center(
+                                          child: Text("Không có gì ở đây"));
+                                    }
 
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }
 
-                              myuser.User user =
-                                  myuser.User.getDataFromSnapshot(
-                                      snapshot: snapshot.requireData);
+                                    myuser.User user =
+                                        myuser.User.getDataFromSnapshot(
+                                            snapshot: snapshot.requireData);
 
-                              return SizedBox(
-                                width: 120,
-                                height: 40,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    UserRepository.followEvent(
-                                        username: listUser[index].username);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.red),
-                                  ),
-                                  child: Text(user.following
-                                          .contains(listUser[index].username)
-                                      ? "Hủy Follow"
-                                      : "Follow"),
-                                ),
-                              );
-                            })
-                      ],
+                                    return SizedBox(
+                                      width: 120,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          UserRepository.followEvent(
+                                              username:
+                                                  listUser[index].username);
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.red),
+                                        ),
+                                        child: Text(user.following.contains(
+                                                listUser[index].username)
+                                            ? "Hủy Follow"
+                                            : "Follow"),
+                                      ),
+                                    );
+                                  })
+                        ],
+                      ),
                     ),
                   ),
                 );

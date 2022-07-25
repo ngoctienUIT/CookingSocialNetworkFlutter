@@ -3,14 +3,13 @@ import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 
 class YourProfilePage extends StatefulWidget {
-  const YourProfilePage({Key? key, required this.userName, required this.check})
-      : super(key: key);
+  const YourProfilePage({Key? key, required this.userName}) : super(key: key);
   final String userName;
-  final bool check;
 
   @override
   State<YourProfilePage> createState() => _YourProfilePageState();
@@ -19,12 +18,10 @@ class YourProfilePage extends StatefulWidget {
 class _YourProfilePageState extends State<YourProfilePage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  late bool checkFollow;
 
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-    checkFollow = widget.check;
     super.initState();
   }
 
@@ -96,29 +93,46 @@ class _YourProfilePageState extends State<YourProfilePage>
                           return itemFollow(user: user);
                         }),
                     const SizedBox(height: 10),
-                    StatefulBuilder(builder: (context, setState) {
-                      return SizedBox(
-                        width: 150,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await UserRepository.followEvent(
-                                username: widget.userName);
-                            checkFollow = await UserRepository.checkFollow(
-                                username: widget.userName);
-                            setState(() {});
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.red),
-                          ),
-                          child: Text(
-                            checkFollow ? "Hủy Follow" : "Follow",
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      );
-                    }),
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: UserRepository.getDataUser(
+                            username: FirebaseAuth.instance.currentUser!.email
+                                .toString()),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text("Không có gì ở đây"),
+                            );
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          myuser.User user = myuser.User.getDataFromSnapshot(
+                              snapshot: snapshot.requireData);
+                          return SizedBox(
+                            width: 150,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                UserRepository.followEvent(
+                                    username: widget.userName);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.red),
+                              ),
+                              child: Text(
+                                user.following.contains(widget.userName)
+                                    ? "Hủy Follow"
+                                    : "Follow",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          );
+                        }),
                     const SizedBox(height: 10),
                     Text(info == null ? "mô tả" : info.description),
                   ],

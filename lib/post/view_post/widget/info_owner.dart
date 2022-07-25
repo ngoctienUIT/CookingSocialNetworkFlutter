@@ -27,17 +27,11 @@ Widget infoOwner({Post? post}) {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () async {
-                bool check = await UserRepository.checkFollow(
-                    username: "ab123@gmail.com");
-                // ignore: use_build_context_synchronously
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => YourProfilePage(
-                      userName: post.owner,
-                      check: check,
-                    ),
+                    builder: (context) => YourProfilePage(userName: post.owner),
                   ),
                 );
               },
@@ -53,17 +47,12 @@ Widget infoOwner({Post? post}) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: () async {
-                    bool check = await UserRepository.checkFollow(
-                        username: "ab123@gmail.com");
-                    // ignore: use_build_context_synchronously
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => YourProfilePage(
-                          userName: post.owner,
-                          check: check,
-                        ),
+                        builder: (context) =>
+                            YourProfilePage(userName: post.owner),
                       ),
                     );
                   },
@@ -74,17 +63,12 @@ Widget infoOwner({Post? post}) {
                   ),
                 ),
                 InkWell(
-                    onTap: () async {
-                      bool check = await UserRepository.checkFollow(
-                          username: "ab123@gmail.com");
-                      // ignore: use_build_context_synchronously
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => YourProfilePage(
-                            userName: post.owner,
-                            check: check,
-                          ),
+                          builder: (context) =>
+                              YourProfilePage(userName: post.owner),
                         ),
                       );
                     },

@@ -27,8 +27,8 @@ Widget listPost({required myuser.User user, required int index}) {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: list.length,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 150,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
               crossAxisSpacing: 2,
               mainAxisSpacing: 2,
               childAspectRatio: 2 / 3,
