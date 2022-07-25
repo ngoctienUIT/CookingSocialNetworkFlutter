@@ -1,3 +1,5 @@
+import 'package:cooking_social_network/main/search/page/all_search.dart';
+import 'package:cooking_social_network/main/search/page/user_search.dart';
 import 'package:cooking_social_network/main/search/search_view.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +33,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 child: InkWell(
                   onTap: () async {
                     var query = await showSearch(
-                        context: context, delegate: SearchView());
+                        context: context, delegate: SearchView(search: search));
                     setState(() {
                       search = query!;
                     });
@@ -55,27 +57,29 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                child: TabBar(
-                    controller: _tabController,
-                    labelColor: Colors.red,
-                    unselectedLabelColor: Colors.grey,
-                    isScrollable: true,
-                    indicatorColor: Colors.red,
-                    tabs: const [
-                      Tab(text: "Tất cả"),
-                      Tab(text: "Người dùng"),
-                      Tab(text: "Bài viết")
-                    ]),
-              ),
+              search == ""
+                  ? const SizedBox(height: 10)
+                  : Container(
+                      alignment: Alignment.center,
+                      child: TabBar(
+                          controller: _tabController,
+                          labelColor: Colors.red,
+                          unselectedLabelColor: Colors.grey,
+                          isScrollable: true,
+                          indicatorColor: Colors.red,
+                          tabs: const [
+                            Tab(text: "Tất cả"),
+                            Tab(text: "Người dùng"),
+                            Tab(text: "Bài viết")
+                          ]),
+                    ),
             ],
           ),
         ),
         Expanded(
             child: TabBarView(
           controller: _tabController,
-          children: [Text("1"), Text("2"), Text("3")],
+          children: [AllSearch(), UserSearch(query: search), Text("3")],
         ))
       ],
     );

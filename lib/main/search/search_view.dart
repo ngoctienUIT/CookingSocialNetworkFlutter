@@ -1,20 +1,27 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/repository/history_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SearchView extends SearchDelegate<String> {
+  String search;
+  bool count = true;
+  SearchView({required this.search}) {
+    query = search;
+  }
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(
-        onPressed: () {
-          query = "";
-        },
-        icon: const Icon(Icons.clear_rounded),
-      )
+      query == ""
+          ? const SizedBox.shrink()
+          : IconButton(
+              onPressed: () {
+                query = "";
+              },
+              icon: const Icon(Icons.clear_rounded),
+            )
     ];
   }
 
@@ -22,7 +29,7 @@ class SearchView extends SearchDelegate<String> {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       onPressed: () {
-        close(context, "");
+        close(context, query);
       },
       icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
     );
@@ -40,12 +47,16 @@ class SearchView extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    if (count) {
+      query = search;
+      count = false;
+    }
     return query == "" ? searchHistory() : userSearch();
   }
 
   Widget userSearch() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection("info").snapshots(),
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection("info").get(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(child: Text("Không có gì ở đây"));
@@ -98,8 +109,11 @@ class SearchView extends SearchDelegate<String> {
   }
 
   Widget searchHistory() {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: HistoryRepository.getDataHistory(),
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection("history")
+          .doc(FirebaseAuth.instance.currentUser!.email.toString())
+          .get(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(child: Text("Không có gì ở đây"));
@@ -149,4 +163,8 @@ class SearchView extends SearchDelegate<String> {
 
   @override
   String? get searchFieldLabel => "Tìm kiếm";
+
+  @override
+  TextStyle? get searchFieldStyle =>
+      const TextStyle(fontSize: 18, fontWeight: FontWeight.normal);
 }

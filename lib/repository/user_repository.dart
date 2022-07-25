@@ -146,11 +146,7 @@ class UserRepository {
         .get()
         .then((snapshot) {
       myuser.User user = myuser.User.getDataFromSnapshot(snapshot: snapshot);
-      if (user.following.contains(username)) {
-        check = true;
-      } else {
-        check = false;
-      }
+      check = user.following.contains(username);
     });
     return check;
   }
