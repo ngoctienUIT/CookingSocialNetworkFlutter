@@ -30,6 +30,14 @@ Widget miniPost({required String id}) {
           },
           child: Container(
             decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Colors.blue,
+                    Colors.red,
+                  ],
+                ),
                 border: Border.all(width: 1, color: Colors.black),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Stack(children: [
@@ -46,13 +54,21 @@ Widget miniPost({required String id}) {
               Positioned(
                 right: 5,
                 bottom: 5,
-                child: Row(
-                  children: [
-                    const Icon(Icons.favorite_outline_rounded,
-                        color: Colors.white, size: 18),
-                    Text(post.favourites.length.toString(),
-                        style: const TextStyle(color: Colors.white)),
-                  ],
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.favorite_outline_rounded,
+                          color: Colors.red, size: 18),
+                      const SizedBox(width: 5),
+                      Text(post.favourites.length.toString(),
+                          style: const TextStyle(color: Colors.red)),
+                    ],
+                  ),
                 ),
               ),
             ]),

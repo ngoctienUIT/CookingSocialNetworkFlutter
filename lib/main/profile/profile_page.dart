@@ -8,6 +8,7 @@ import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -182,18 +183,16 @@ class _ProfilePageState extends State<ProfilePage>
                           FirebaseAuth.instance.currentUser!.email.toString()),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return const Center(
-                        child: Text("Không có gì ở đây"),
-                      );
+                      return const Icon(Icons.error);
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return loadingPost();
                     }
+
                     myuser.User user = myuser.User.getDataFromSnapshot(
                         snapshot: snapshot.requireData);
+
                     return SizedBox(
                       height: double.maxFinite,
                       child: TabBarView(controller: _tabController, children: [
@@ -207,6 +206,40 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ],
+    );
+  }
+
+  GridView loadingPost() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 9,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 2,
+        mainAxisSpacing: 2,
+        childAspectRatio: 2 / 3,
+      ),
+      itemBuilder: (context, index) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.black),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

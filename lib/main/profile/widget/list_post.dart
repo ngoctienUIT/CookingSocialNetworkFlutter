@@ -1,6 +1,5 @@
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:flutter/material.dart';
-
 import 'mini_post.dart';
 
 Widget listPost({required myuser.User user, required int index}) {
