@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
@@ -67,7 +68,15 @@ class _YourProfilePageState extends State<YourProfilePage>
                       child: info == null
                           ? Image.asset("assets/images/cooking.png",
                               width: 150, height: 150)
-                          : Image.network(info.avatar, width: 150, height: 150),
+                          : CachedNetworkImage(
+                              imageUrl: info.avatar,
+                              width: 150,
+                              height: 150,
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
                     ),
                     const SizedBox(height: 10),
                     Text(

@@ -1,13 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/login/login_page.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
-import 'package:cooking_social_network/profile/your_profile_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -67,22 +66,13 @@ class _ProfilePageState extends State<ProfilePage>
                   right: 0,
                   child: TextButton(
                     onPressed: () async {
-                      // await UserRepository.logout();
-                      // if (!mounted) return;
-                      // Navigator.pushAndRemoveUntil(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const LoginPage()),
-                      //     (route) => false);
-
+                      await UserRepository.logout();
                       if (!mounted) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const YourProfilePage(
-                              userName: "ab123@gmail.com"),
-                        ),
-                      );
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                          (route) => false);
                     },
                     child: const Icon(Icons.menu, color: Colors.black),
                   ),
@@ -101,7 +91,15 @@ class _ProfilePageState extends State<ProfilePage>
                     child: info == null
                         ? Image.asset("assets/images/cooking.png",
                             width: 150, height: 150)
-                        : Image.network(info.avatar, width: 150, height: 150),
+                        : CachedNetworkImage(
+                            imageUrl: info.avatar,
+                            width: 150,
+                            height: 150,
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
                   ),
                   const SizedBox(height: 10),
                   Text(

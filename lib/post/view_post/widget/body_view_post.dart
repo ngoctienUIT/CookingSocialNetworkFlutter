@@ -3,6 +3,7 @@ import 'package:cooking_social_network/post/view_post/widget/floating_button_ico
 import 'package:cooking_social_network/post/view_post/widget/info_food.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
   return Scaffold(
@@ -22,7 +23,13 @@ Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : Image.network(post.images[index]),
+                        : CachedNetworkImage(
+                            imageUrl: post.images[index],
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ), //Image.network(post.images[index]),
                   ),
                   floatingButtonIcon(context,
                       left: 10,

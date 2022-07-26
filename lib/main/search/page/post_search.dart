@@ -1,10 +1,11 @@
+import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/view_post/view_post_page.dart';
-import 'package:cooking_social_network/repository/post_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PostSearch extends StatelessWidget {
   const PostSearch({Key? key, required this.query}) : super(key: key);
@@ -16,11 +17,11 @@ class PostSearch extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection("post").snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Center(child: Text("Không có gì ở đây"));
+          return const Icon(Icons.error);
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return postLoading();
         }
 
         List<Post> listPost = snapshot.data!.docs
@@ -60,9 +61,15 @@ class PostSearch extends StatelessWidget {
                         height: double.infinity,
                         child: Card(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Image.network(
-                            listPost[index].images[0],
-                            fit: BoxFit.fitWidth,
+                          child: CachedNetworkImage(
+                            imageUrl: listPost[index].images[0],
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(color: Colors.grey),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
                         ),
                       ),
@@ -81,26 +88,36 @@ class PostSearch extends StatelessWidget {
                             .get(),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
-                            return const Center(
-                                child: Text("Không có gì ở đây"));
+                            return const Icon(Icons.error);
                           }
 
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return loadingInfo();
                           }
 
                           Info info = Info.getDataFromSnapshot(
                               snapshot: snapshot.requireData);
+
                           return Padding(
                             padding: const EdgeInsets.all(5),
                             child: Row(
                               children: [
                                 ClipOval(
-                                  child: Image.network(
-                                    info.avatar,
+                                  child: CachedNetworkImage(
+                                    imageUrl: info.avatar,
                                     width: 30,
+                                    placeholder: (context, url) =>
+                                        Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          color: Colors.grey),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -148,6 +165,150 @@ class PostSearch extends StatelessWidget {
               );
             });
       },
+    );
+  }
+
+  Widget loadingInfo() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(90),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: Random().nextDouble() * 50 + 50,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: Random().nextDouble() * 150 + 50,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.favorite),
+            Container(
+              width: Random().nextDouble() * 10 + 15,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget postLoading() {
+    return GridView.builder(
+      itemCount: 10,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 2,
+        mainAxisSpacing: 2,
+        childAspectRatio: 2 / 3,
+      ),
+      itemBuilder: (context, index) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Column(
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: Container(color: Colors.grey),
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              width: Random().nextDouble() * 150 + 50,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(90),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: Random().nextDouble() * 50 + 50,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          width: Random().nextDouble() * 150 + 50,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.favorite),
+                  Container(
+                    width: Random().nextDouble() * 10 + 15,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
