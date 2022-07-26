@@ -78,14 +78,15 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           ),
         ),
         Expanded(
-            child: TabBarView(
-          controller: _tabController,
-          children: [
-            AllSearch(),
-            UserSearch(query: search),
-            PostSearch(query: search)
-          ],
-        ))
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              const AllSearch(),
+              UserSearch(query: search),
+              PostSearch(query: search)
+            ],
+          ),
+        )
       ],
     );
   }

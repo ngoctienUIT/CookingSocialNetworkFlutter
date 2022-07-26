@@ -79,7 +79,6 @@ class UserRepository {
       "favourites": [],
       "followers": [],
       "following": [],
-      "notify": [],
       "post": [],
     };
 
