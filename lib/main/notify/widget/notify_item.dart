@@ -1,9 +1,12 @@
 import 'dart:math';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/main/notify/widget/loading_notify.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/notify.dart';
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/post/view_post/view_post_page.dart';
+import 'package:cooking_social_network/profile/your_profile_page.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:shimmer/shimmer.dart';
 
-Widget notifyItem({required String id}) {
+Widget notifyItem({required String id, String? type}) {
   return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance.collection("notify").doc(id).get(),
       builder: (context, snapshot) {
@@ -25,66 +28,12 @@ Widget notifyItem({required String id}) {
 
         Notify notify =
             Notify.getDataFromSnapshot(snapshot: snapshot.requireData);
-        return bodyNotify(notify);
+        if (notify.type == type || type == null) {
+          return bodyNotify(notify);
+        } else {
+          return const SizedBox.shrink();
+        }
       });
-}
-
-Shimmer loadingNotify() {
-  return Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        children: [
-          ClipOval(
-            child: Container(
-              width: 50,
-              height: 50,
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: Random().nextDouble() * 100 + 50,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  width: Random().nextDouble() * 150 + 100,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  width: Random().nextDouble() * 50 + 30,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            width: Random().nextDouble() * 50 + 50,
-            height: 50,
-            color: Colors.grey,
-          )
-        ],
-      ),
-    ),
-  );
 }
 
 Widget bodyNotify(Notify notify) {
@@ -96,18 +45,42 @@ Widget bodyNotify(Notify notify) {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return loadingNotify();
         }
 
         Info info = Info.getDataFromSnapshot(snapshot: snapshot.requireData);
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => notify.type == "follow"
+                    ? YourProfilePage(userName: notify.user)
+                    : ViewPostPage(id: notify.id),
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               children: [
                 ClipOval(
-                  child: Image.network(info.avatar, width: 50, height: 50),
+                  child: CachedNetworkImage(
+                    imageUrl: info.avatar,
+                    width: 50,
+                    height: 50,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 50,
+                        width: Random().nextDouble() * 50 + 50,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -159,15 +132,31 @@ Widget imagePost(Notify notify) {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              width: Random().nextDouble() * 50 + 50,
+              height: 50,
+              color: Colors.grey,
+            ),
+          );
         }
 
         Post post = Post.getDataFromSnapshot(snapshot: snapshot.requireData);
-        return SizedBox(
+        return CachedNetworkImage(
+          imageUrl: post.images[0],
           width: 50,
-          child: Image.network(
-            post.images[0],
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 50,
+              width: Random().nextDouble() * 50 + 50,
+              color: Colors.grey,
+            ),
           ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         );
       });
 }
@@ -182,7 +171,19 @@ Widget refollowButton(Notify notify) {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+            width: 120,
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+          );
         }
         myuser.User user =
             myuser.User.getDataFromSnapshot(snapshot: snapshot.requireData);

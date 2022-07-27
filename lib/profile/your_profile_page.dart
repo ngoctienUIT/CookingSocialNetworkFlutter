@@ -72,8 +72,10 @@ class _YourProfilePageState extends State<YourProfilePage>
                               imageUrl: info.avatar,
                               width: 150,
                               height: 150,
-                              placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator()),
+                              placeholder: (context, url) => Image.asset(
+                                  "assets/images/cooking.png",
+                                  width: 150,
+                                  height: 150),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             ),

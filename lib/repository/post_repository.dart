@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/comment.dart';
+import 'package:cooking_social_network/model/notify.dart';
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/repository/notify_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,6 +26,7 @@ class PostRepository {
   static Future favouriteEvent({required String id}) async {
     List<String> favouritesPost = [];
     List<String> favouritesUser = [];
+    String username = "";
 
     await FirebaseFirestore.instance
         .collection("post")
@@ -31,6 +34,7 @@ class PostRepository {
         .get()
         .then((snapshot) {
       Post post = Post.getDataFromSnapshot(snapshot: snapshot);
+      username = post.owner;
       favouritesPost = post.favourites;
     });
     await FirebaseFirestore.instance
@@ -45,9 +49,25 @@ class PostRepository {
       favouritesPost
           .remove(FirebaseAuth.instance.currentUser!.email.toString());
       favouritesUser.remove(id);
+      NotifyRepository.removeNotify(
+          notify: Notify(
+              content: "",
+              id: id,
+              user: FirebaseAuth.instance.currentUser!.email.toString(),
+              time: DateTime.now(),
+              type: "favourist"),
+          username: username);
     } else {
       favouritesPost.add(FirebaseAuth.instance.currentUser!.email.toString());
       favouritesUser.add(id);
+      NotifyRepository.addNotify(
+          notify: Notify(
+              content: "",
+              id: id,
+              user: FirebaseAuth.instance.currentUser!.email.toString(),
+              time: DateTime.now(),
+              type: "favourist"),
+          username: username);
     }
 
     await FirebaseFirestore.instance
@@ -133,6 +153,14 @@ class PostRepository {
           .collection("post")
           .doc(id)
           .update({"comments": post.comments});
+      NotifyRepository.addNotify(
+          notify: Notify(
+              content: content,
+              id: id,
+              user: FirebaseAuth.instance.currentUser!.email.toString(),
+              time: DateTime.now(),
+              type: "comment"),
+          username: post.owner);
     });
   }
 

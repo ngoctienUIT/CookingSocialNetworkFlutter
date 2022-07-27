@@ -1,4 +1,4 @@
-import 'package:cooking_social_network/main/notify/page/all_notify.dart';
+import 'package:cooking_social_network/main/notify/page/show_notify.dart';
 import 'package:flutter/material.dart';
 
 class NotifyPage extends StatefulWidget {
@@ -39,11 +39,11 @@ class _NotifyPageState extends State<NotifyPage> with TickerProviderStateMixin {
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              AllNotify(),
-              Text("Yêu thích"),
-              Text("Bình luận"),
-              Text("Theo dõi")
+            children: const [
+              ShowNotify(),
+              ShowNotify(type: "favourist"),
+              ShowNotify(type: "comment"),
+              ShowNotify(type: "follow")
             ],
           ),
         )

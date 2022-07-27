@@ -66,6 +66,7 @@ class SearchView extends SearchDelegate<String> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+
         List<Info> listUser = snapshot.data!.docs
             .map(
               (doc) => Info.getDataFromSnapshot(snapshot: doc),

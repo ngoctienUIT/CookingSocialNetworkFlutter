@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/model/info.dart';
+import 'package:cooking_social_network/model/notify.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
+import 'package:cooking_social_network/repository/notify_repository.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -173,9 +175,25 @@ class UserRepository {
     if (await checkFollow(username: username)) {
       yourFollow.remove(FirebaseAuth.instance.currentUser!.email.toString());
       myFollow.remove(username);
+      NotifyRepository.removeNotify(
+          notify: Notify(
+              content: "",
+              id: "",
+              user: FirebaseAuth.instance.currentUser!.email.toString(),
+              time: DateTime.now(),
+              type: "follow"),
+          username: username);
     } else {
       yourFollow.add(FirebaseAuth.instance.currentUser!.email.toString());
       myFollow.add(username);
+      NotifyRepository.addNotify(
+          notify: Notify(
+              content: "",
+              id: "",
+              user: FirebaseAuth.instance.currentUser!.email.toString(),
+              time: DateTime.now(),
+              type: "follow"),
+          username: username);
     }
 
     await FirebaseFirestore.instance

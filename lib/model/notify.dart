@@ -13,7 +13,7 @@ class Notify extends Equatable {
       {required this.content,
       required this.id,
       required this.user,
-      required this.status,
+      this.status = 0,
       required this.time,
       required this.type});
 

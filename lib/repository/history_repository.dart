@@ -15,16 +15,26 @@ class HistoryRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .get()
         .then((history) {
-      var data = history.data() as Map<String, dynamic>;
-      List<String> listHistory = (data["history"] as List<dynamic>)
-          .map((history) => history.toString())
-          .toList();
-      listHistory.remove(search);
+      List<String> listHistory = [];
+      if (history.exists) {
+        var data = history.data() as Map<String, dynamic>;
+        listHistory = (data["history"] as List<dynamic>)
+            .map((history) => history.toString())
+            .toList();
+        listHistory.remove(search);
+      }
       listHistory.add(search);
-      FirebaseFirestore.instance
-          .collection("history")
-          .doc(FirebaseAuth.instance.currentUser!.email.toString())
-          .update({"history": listHistory});
+      if (history.exists) {
+        FirebaseFirestore.instance
+            .collection("history")
+            .doc(FirebaseAuth.instance.currentUser!.email.toString())
+            .update({"history": listHistory});
+      } else {
+        FirebaseFirestore.instance
+            .collection("history")
+            .doc(FirebaseAuth.instance.currentUser!.email.toString())
+            .set({"history": listHistory});
+      }
     });
   }
 }

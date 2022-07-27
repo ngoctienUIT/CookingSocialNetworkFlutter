@@ -39,19 +39,25 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: customBottomAppBar(),
-      body: WillPopScope(
-        onWillPop: onWillPop,
-        child: SafeArea(
-            child: PageView.builder(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-          itemCount: 4,
-          itemBuilder: (context, index) => getPage(),
-        )),
+      body: Theme(
+        data: ThemeData(
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+        ),
+        child: WillPopScope(
+          onWillPop: onWillPop,
+          child: SafeArea(
+              child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
+            itemCount: 4,
+            itemBuilder: (context, index) => getPage(),
+          )),
+        ),
       ),
     );
   }
