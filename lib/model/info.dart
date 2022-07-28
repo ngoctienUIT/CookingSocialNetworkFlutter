@@ -26,4 +26,14 @@ class Info {
         avatar: data["avatar"],
         username: snapshot.id);
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": name,
+      "birthday": birthday,
+      "gender": gender,
+      "description": description,
+      "avatar": avatar
+    };
+  }
 }

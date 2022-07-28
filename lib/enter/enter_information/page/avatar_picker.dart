@@ -50,33 +50,34 @@ class _AvatarPickerState extends State<AvatarPicker> {
           const Text("Tôi có thể gọi bạn là gì?"),
           const SizedBox(height: 50),
           InkWell(
-              onTap: () {
-                pickImage();
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  ClipOval(
-                    child: image != null
-                        ? Image.file(
-                            image!,
-                            width: 200,
-                            height: 200,
-                          )
-                        : Image.asset(
-                            "assets/images/cooking.png",
-                            width: 200,
-                            height: 200,
-                          ),
-                  ),
-                  Image.asset(
-                    "assets/images/add_photo.png",
-                    width: 30,
-                    height: 30,
-                    color: Colors.white,
-                  ),
-                ],
-              )),
+            onTap: () {
+              pickImage();
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ClipOval(
+                  child: image != null
+                      ? Image.file(
+                          image!,
+                          width: 200,
+                          height: 200,
+                        )
+                      : Image.asset(
+                          "assets/images/cooking.png",
+                          width: 200,
+                          height: 200,
+                        ),
+                ),
+                Image.asset(
+                  "assets/images/add_photo.png",
+                  width: 30,
+                  height: 30,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 50),
           enterButton("Hoàn thành", () {
             if (image != null) {

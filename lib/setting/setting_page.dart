@@ -1,5 +1,6 @@
 import 'package:cooking_social_network/login/login_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/setting/page/profile_setting.dart';
 import 'package:cooking_social_network/setting/widget/item_setting.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,14 @@ class _SettingPageState extends State<SettingPage> {
         children: [
           itemSetting(
             text: "Tài khoản",
-            action: () {},
+            action: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileSetting(),
+                ),
+              );
+            },
             icon: Icons.account_circle,
           ),
           itemSetting(

@@ -2,6 +2,8 @@ import 'package:cooking_social_network/enter/enter_information/enter_information
 import 'package:cooking_social_network/login/bloc/login_bloc.dart';
 import 'package:cooking_social_network/login/bloc/login_event.dart';
 import 'package:cooking_social_network/login/bloc/login_state.dart';
+import 'package:cooking_social_network/login/widget/login_button.dart';
+import 'package:cooking_social_network/login/widget/show_error.dart';
 import 'package:cooking_social_network/main/main_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:cooking_social_network/signup/signup_page.dart';
@@ -229,37 +231,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Expanded loginButton(
-      {required IconData icon,
-      required String text,
-      required Color color,
-      required Function action}) {
-    return Expanded(
-      child: ElevatedButton.icon(
-        icon: FaIcon(
-          icon,
-          size: 25,
-        ),
-        label: Text(text),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(color),
-          padding: MaterialStateProperty.all(
-            const EdgeInsets.symmetric(vertical: 10),
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        ),
-        onPressed: () async {
-          action();
-        },
-      ),
-    );
-  }
-
-  Material loginInput(
+  Widget loginInput(
       {required String hintText,
       required Function(String) action,
       required TextEditingController controller,
@@ -287,19 +259,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Widget showError(bool check, String text) {
-    if (check) {
-      return const SizedBox.shrink();
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          text,
-          style: const TextStyle(color: Colors.red, fontSize: 12),
-        ),
-      );
-    }
   }
 }

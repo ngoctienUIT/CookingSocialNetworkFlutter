@@ -29,7 +29,7 @@ Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
                                 child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
-                          ), //Image.network(post.images[index]),
+                          ),
                   ),
                   floatingButtonIcon(context,
                       left: 10,

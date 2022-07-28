@@ -206,4 +206,11 @@ class UserRepository {
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .update({"following": myFollow});
   }
+
+  static Future updateInfo({required Info info}) async {
+    FirebaseFirestore.instance
+        .collection("info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .update(info.toMap());
+  }
 }

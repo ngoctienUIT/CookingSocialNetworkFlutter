@@ -1,6 +1,7 @@
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EnterBirthday extends StatefulWidget {
   const EnterBirthday({Key? key, required this.nextPage, required this.info})
@@ -29,11 +30,11 @@ class _EnterBirthdayState extends State<EnterBirthday> {
           const SizedBox(height: 100),
           InkWell(
             onTap: (() async {
-              DateTime newDate = await showDatePicker(
+              DateTime? newDate = await showDatePicker(
                   context: context,
                   initialDate: dateTime,
                   firstDate: DateTime(1900),
-                  lastDate: DateTime(2100)) as DateTime;
+                  lastDate: DateTime.now());
               if (newDate == null) return;
               setState(() {
                 dateTime = newDate;
@@ -58,8 +59,8 @@ class _EnterBirthdayState extends State<EnterBirthday> {
             ),
           ),
           enterButton("Tiếp", () {
-            widget.info.birthday =
-                "${dateTime.day < 10 ? "0${dateTime.day}" : dateTime.day}/${dateTime.month < 10 ? "0${dateTime.month}" : dateTime.month}/${dateTime.year}";
+            widget.info.birthday = DateFormat('dd/MM/yyyy').format(dateTime);
+            // "${dateTime.day < 10 ? "0${dateTime.day}" : dateTime.day}/${dateTime.month < 10 ? "0${dateTime.month}" : dateTime.month}/${dateTime.year}";
             widget.nextPage(widget.info);
           })
         ],

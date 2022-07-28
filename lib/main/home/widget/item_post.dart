@@ -90,30 +90,37 @@ class ItemPost extends StatelessWidget {
                           fontSize: 18),
                     ),
                     const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Spacer(),
-                        Text(
-                          "${post.cookingTime} phút",
-                          style: const TextStyle(
-                            color: Color.fromRGBO(160, 164, 167, 1),
+                    IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Spacer(),
+                          Text(
+                            "${post.cookingTime} phút",
+                            style: const TextStyle(
+                              color: Color.fromRGBO(160, 164, 167, 1),
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "${post.level}/5",
-                          style: const TextStyle(
-                            color: Color.fromRGBO(160, 164, 167, 1),
+                          const VerticalDivider(
+                            endIndent: 3,
+                            indent: 3,
+                            thickness: 0.5,
+                            color: Colors.black,
                           ),
-                        ),
-                        const Icon(
-                          Icons.star,
-                          color: Colors.yellowAccent,
-                          size: 18,
-                        ),
-                        const Spacer(),
-                      ],
+                          Text(
+                            "${post.level}/5",
+                            style: const TextStyle(
+                              color: Color.fromRGBO(160, 164, 167, 1),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.star,
+                            color: Colors.yellowAccent,
+                            size: 18,
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 5),
                     Row(

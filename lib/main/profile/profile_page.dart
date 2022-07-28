@@ -5,6 +5,7 @@ import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/setting/page/profile_setting.dart';
 import 'package:cooking_social_network/setting/setting_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -132,13 +133,20 @@ class _ProfilePageState extends State<ProfilePage>
                     width: 150,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileSetting(),
+                          ),
+                        );
+                      },
                       style: ButtonStyle(
                           shape:
                               MaterialStateProperty.resolveWith<OutlinedBorder>(
                                   (_) {
                             return RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(5),
                                 side: const BorderSide(
                                     width: 1, color: Colors.black));
                           }),
