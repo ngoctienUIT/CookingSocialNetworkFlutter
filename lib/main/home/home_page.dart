@@ -1,4 +1,6 @@
 import 'package:cooking_social_network/main/home/page/follow_post.dart';
+import 'package:cooking_social_network/main/home/page/for_you_post.dart';
+import 'package:cooking_social_network/main/home/page/new_post.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
             child: TabBarView(
               controller: _tabController,
-              children: const [Text("data"), Text("data"), FollowPost()],
+              children: const [NewPost(), ForYouPost(), FollowPost()],
             ),
           ),
         )

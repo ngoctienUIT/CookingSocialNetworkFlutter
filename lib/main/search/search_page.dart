@@ -25,7 +25,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     return Column(
       children: [
         Material(
-          elevation: 2,
+          elevation: 1,
           child: Column(
             children: [
               const SizedBox(height: 10),

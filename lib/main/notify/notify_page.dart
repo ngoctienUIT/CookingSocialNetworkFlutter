@@ -21,20 +21,23 @@ class _NotifyPageState extends State<NotifyPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          alignment: Alignment.center,
-          child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.red,
-              unselectedLabelColor: Colors.grey,
-              isScrollable: true,
-              indicatorColor: Colors.red,
-              tabs: const [
-                Tab(text: "Tất cả"),
-                Tab(text: "Yêu thích"),
-                Tab(text: "Bình luận"),
-                Tab(text: "Theo dõi")
-              ]),
+        Material(
+          elevation: 1,
+          child: Container(
+            alignment: Alignment.center,
+            child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.red,
+                unselectedLabelColor: Colors.grey,
+                isScrollable: true,
+                indicatorColor: Colors.red,
+                tabs: const [
+                  Tab(text: "Tất cả"),
+                  Tab(text: "Yêu thích"),
+                  Tab(text: "Bình luận"),
+                  Tab(text: "Theo dõi")
+                ]),
+          ),
         ),
         Expanded(
           child: TabBarView(

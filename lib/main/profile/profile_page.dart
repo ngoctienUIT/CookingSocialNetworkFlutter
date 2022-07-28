@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cooking_social_network/login/login_page.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:cooking_social_network/setting/setting_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -66,14 +66,13 @@ class _ProfilePageState extends State<ProfilePage>
                 Positioned(
                   right: 0,
                   child: TextButton(
-                    onPressed: () async {
-                      await UserRepository.logout();
-                      if (!mounted) return;
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                          (route) => false);
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingPage(),
+                        ),
+                      );
                     },
                     child: const Icon(Icons.menu, color: Colors.black),
                   ),

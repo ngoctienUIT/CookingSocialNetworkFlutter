@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/main/home/widget/react_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -63,6 +64,8 @@ class FollowPost extends StatelessWidget {
                           const SizedBox(height: 10),
                           const Text(
                             "Tên món",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: Color.fromRGBO(64, 70, 78, 1),
                                 fontWeight: FontWeight.bold,
@@ -110,11 +113,6 @@ class FollowPost extends StatelessWidget {
                                   color: Colors.green,
                                   text: "123"),
                               const Spacer(),
-                              reactWidget(
-                                  icon: FontAwesomeIcons.share,
-                                  color: Colors.green,
-                                  text: "123"),
-                              const Spacer(),
                             ],
                           )
                         ],
@@ -124,23 +122,5 @@ class FollowPost extends StatelessWidget {
                 );
               });
         });
-  }
-
-  Column reactWidget(
-      {required IconData icon,
-      required Color color,
-      double size = 20,
-      required String text}) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: size,
-          color: color,
-        ),
-        const SizedBox(height: 2),
-        Text(text, style: const TextStyle(fontSize: 12))
-      ],
-    );
   }
 }
