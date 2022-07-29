@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,7 +80,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
             ),
           ),
           const SizedBox(height: 50),
-          enterButton("Hoàn thành", () {
+          enterButton(S.current.complete, () {
             if (image != null) {
               widget.info.avatar = image!.path;
             }

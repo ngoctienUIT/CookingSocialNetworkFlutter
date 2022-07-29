@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class EnterName extends StatelessWidget {
                 ),
               ),
             ),
-            enterButton("Tiếp", () {
+            enterButton(S.current.next, () {
               info.name = _nameController.text;
               nextPage(info);
             })

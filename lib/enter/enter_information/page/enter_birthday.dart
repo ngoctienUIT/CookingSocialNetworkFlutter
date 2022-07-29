@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -58,7 +59,7 @@ class _EnterBirthdayState extends State<EnterBirthday> {
               ),
             ),
           ),
-          enterButton("Tiếp", () {
+          enterButton(S.current.next, () {
             widget.info.birthday = DateFormat('dd/MM/yyyy').format(dateTime);
             // "${dateTime.day < 10 ? "0${dateTime.day}" : dateTime.day}/${dateTime.month < 10 ? "0${dateTime.month}" : dateTime.month}/${dateTime.year}";
             widget.nextPage(widget.info);

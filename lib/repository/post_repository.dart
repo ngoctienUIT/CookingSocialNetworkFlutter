@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/comment.dart';
 import 'package:cooking_social_network/model/notify.dart';
 import 'package:cooking_social_network/model/post.dart';
@@ -7,6 +8,7 @@ import 'package:cooking_social_network/repository/notify_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 
 class PostRepository {
   static Future<bool> checkFavourite({required String id}) async {
@@ -206,21 +208,22 @@ class PostRepository {
     String time = "";
     var dateTime = dateTime2.difference(dateTime1);
     if (dateTime.inSeconds == 0) {
-      time = "Vừa xong";
+      time = S.current.justFinished;
     } else if (dateTime.inSeconds < 60) {
-      time = "${dateTime.inSeconds} giây";
+      time = "${dateTime.inSeconds} ${S.current.second}";
     } else if (dateTime.inMinutes < 60) {
-      time = "${dateTime.inMinutes} phút";
+      time = "${dateTime.inMinutes} ${S.current.minute}";
     } else if (dateTime.inHours < 24) {
-      time = "${dateTime.inHours} giờ";
+      time = "${dateTime.inHours} ${S.current.hours}";
     } else if (dateTime.inDays < 7) {
-      time = "${dateTime.inDays} ngày";
+      time = "${dateTime.inDays} ${S.current.day}";
     } else if (dateTime.inDays < 30) {
-      time = "${dateTime.inDays / 7} tuần";
+      time = "${dateTime.inDays ~/ 7} ${S.current.week}";
     } else if (dateTime.inDays >= 30 && dateTime.inDays < 365) {
-      time = "${dateTime.inDays / 30} tháng";
+      time = "${dateTime.inDays ~/ 30} ${S.current.month}";
     } else if (dateTime.inDays >= 365) {
-      time = "${dateTime.inDays / 365} năm";
+      // time = "${dateTime.inDays / 365} năm";
+      time = DateFormat('dd/MM/yyyy').format(dateTime1);
     }
     return time;
   }

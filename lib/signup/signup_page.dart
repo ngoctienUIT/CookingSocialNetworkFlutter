@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/enter_information/enter_information.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/signup/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -170,21 +171,22 @@ class _SignupPageState extends State<SignupPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              child: const Text("Sign up"),
+                              child: Text(S.current.signUp),
                             ),
                           ),
                           const SizedBox(height: 50),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Đã có tài khoản?"),
+                              Text(S.current.alreadyHaveAccount),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text(
-                                  "Đăng nhập",
-                                  style: TextStyle(color: Colors.tealAccent),
+                                child: Text(
+                                  S.current.login,
+                                  style:
+                                      const TextStyle(color: Colors.tealAccent),
                                 ),
                               )
                             ],

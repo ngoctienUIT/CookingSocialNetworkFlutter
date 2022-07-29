@@ -1,11 +1,12 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/main/main_page.dart';
-// import 'package:cooking_social_network/login/login_page.dart';
 import 'package:cooking_social_network/onboarding_screen/onboarding_page.dart';
 import 'package:cooking_social_network/repository/user_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      // title: S.current.appName,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -51,6 +52,16 @@ class MyApp extends StatelessWidget {
         splashIconSize: 350,
         duration: 3000,
       ),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('vi', ''),
+      ],
       builder: EasyLoading.init(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 
@@ -30,11 +31,11 @@ class EnterDescription extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  hintText: "Mô tả",
+                  hintText: S.current.description,
                 ),
               ),
             ),
-            enterButton("Tiếp", () {
+            enterButton(S.current.next, () {
               info.description = _descriptionController.text;
               nextPage(info);
             })

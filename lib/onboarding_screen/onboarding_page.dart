@@ -1,3 +1,4 @@
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'body_onboarding_screen.dart';
@@ -15,18 +16,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   final List<Map<String, String>> data = [
     {
-      "title": "Bài viết",
-      "text": "Bạn có thể đăng tải và xem các bài viết về món ăn",
+      "title": S.current.posts,
+      "text": S.current.paragraphSplash1,
       "image": "assets/images/intro1.gif"
     },
     {
-      "title": "Tìm kiếm",
-      "text": "Tìm kiếm những món ăn mà bạn yêu thích",
+      "title": S.current.search,
+      "text": S.current.paragraphSplash2,
       "image": "assets/images/intro2.gif"
     },
     {
-      "title": "Trang cá nhân",
-      "text": "Xây dựng trang cá nhân của riêng bạn",
+      "title": S.current.personalPage,
+      "text": S.current.paragraphSplash3,
       "image": "assets/images/intro3.gif"
     }
   ];
@@ -68,9 +69,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 builder: (context) => const LoginPage()),
                           );
                         },
-                        child: const Text(
-                          "Skip",
-                          style: TextStyle(fontSize: 16),
+                        child: Text(
+                          S.of(context).skip,
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                       const Spacer(),
@@ -109,7 +110,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         }
       },
       child: Text(
-        currentPage != 2 ? "Next" : "Login",
+        currentPage != 2 ? S.of(context).next : S.of(context).login,
         style: const TextStyle(fontSize: 16),
       ),
     );

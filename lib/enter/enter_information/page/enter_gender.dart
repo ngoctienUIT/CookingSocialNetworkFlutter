@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/widget/enter_button.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:flutter/material.dart';
 
@@ -32,13 +33,13 @@ class _EnterGenderState extends State<EnterGender> {
               width: 200,
               child: Column(
                 children: [
-                  genderButton(value: 0, text: "Nam"),
-                  genderButton(value: 1, text: "Nữ"),
+                  genderButton(value: 0, text: S.current.male),
+                  genderButton(value: 1, text: S.current.female)
                 ],
               ),
             ),
           ),
-          enterButton("Tiếp", () {
+          enterButton(S.current.next, () {
             widget.info.gender = _gender;
             widget.nextPage(widget.info);
           })

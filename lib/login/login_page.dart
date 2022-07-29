@@ -1,4 +1,5 @@
 import 'package:cooking_social_network/enter/enter_information/enter_information.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/login/bloc/login_bloc.dart';
 import 'package:cooking_social_network/login/bloc/login_event.dart';
 import 'package:cooking_social_network/login/bloc/login_state.dart';
@@ -97,11 +98,11 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
-                          const SizedBox(
+                          SizedBox(
                             height: 50,
                             child: Text(
-                              "Login",
-                              style: TextStyle(
+                              S.current.login,
+                              style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue),
@@ -163,19 +164,19 @@ class _LoginPageState extends State<LoginPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              child: const Text("Login"),
+                              child: Text(S.current.login),
                             ),
                           ),
                           const SizedBox(height: 10),
                           TextButton(
                             onPressed: () {},
-                            child: const Text(
-                              "Quên mật khẩu?",
-                              style: TextStyle(color: Colors.tealAccent),
+                            child: Text(
+                              S.current.forgotPassword,
+                              style: const TextStyle(color: Colors.tealAccent),
                             ),
                           ),
                           const SizedBox(height: 50),
-                          const Text("hoặc kết nối với"),
+                          Text(S.current.orConnectWith),
                           const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Chưa có mật khẩu?"),
+                              Text(S.current.noPasswordYet),
                               TextButton(
                                 onPressed: () {
                                   Navigator.push(
@@ -210,9 +211,10 @@ class _LoginPageState extends State<LoginPage> {
                                             const SignupPage()),
                                   );
                                 },
-                                child: const Text(
-                                  "Đăng ký",
-                                  style: TextStyle(color: Colors.tealAccent),
+                                child: Text(
+                                  S.current.signUp,
+                                  style:
+                                      const TextStyle(color: Colors.tealAccent),
                                 ),
                               )
                             ],
