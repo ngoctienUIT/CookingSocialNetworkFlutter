@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cooking_social_network/model/ingredient.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,11 @@ class _Page3State extends State<Page3> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ingredients = widget.post.ingredients;
     return SingleChildScrollView(
@@ -55,14 +62,42 @@ class _Page3State extends State<Page3> {
           ingredients.isNotEmpty
               ? Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ListView.builder(
-                    itemCount: ingredients.length,
-                    itemBuilder: (context, index) => itemIngredient(
-                        name: ingredients[index].name,
-                        amount: ingredients[index].amount,
-                        unit: ingredients[index].unit),
+                  child: ReorderableListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item = ingredients.removeAt(oldIndex);
+                        ingredients.insert(newIndex, item);
+                      });
+                    },
+                    itemCount: ingredients.length,
+                    itemBuilder: (context, index) => Dismissible(
+                      background: const Card(
+                        color: Color.fromRGBO(209, 26, 42, 1),
+                        child: Center(
+                          child: Text(
+                            "Xóa",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          ingredients.removeAt(index);
+                        });
+                      },
+                      key: Key(ingredients[index].hashCode.toString()),
+                      child: itemIngredient(
+                          key: ValueKey(index),
+                          name: ingredients[index].name,
+                          amount: ingredients[index].amount,
+                          unit: ingredients[index].unit),
+                    ),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -82,18 +117,30 @@ class _Page3State extends State<Page3> {
     );
   }
 
-  Padding itemIngredient(
-      {required String name, required int amount, required String unit}) {
+  Widget itemIngredient(
+      {required String name,
+      required int amount,
+      required String unit,
+      required Key key}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      key: key,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
         children: [
-          Expanded(child: Text(name)),
-          const Spacer(),
+          Expanded(
+            child: Text(
+              name,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [Text("$amount"), const SizedBox(width: 5), Text(unit)],
+              children: [
+                Text("$amount", style: const TextStyle(fontSize: 16)),
+                const SizedBox(width: 5),
+                Text(unit, style: const TextStyle(fontSize: 16))
+              ],
             ),
           )
         ],

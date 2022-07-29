@@ -45,10 +45,39 @@ class _Page4State extends State<Page4> {
           methods.isNotEmpty
               ? Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ListView.builder(
+                  child: ReorderableListView.builder(
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item = methods.removeAt(oldIndex);
+                        methods.insert(newIndex, item);
+                      });
+                    },
                     itemCount: methods.length,
-                    itemBuilder: (context, index) =>
-                        methodItem(index + 1, methods[index]),
+                    itemBuilder: (context, index) => Dismissible(
+                      background: const Card(
+                        color: Color.fromRGBO(209, 26, 42, 1),
+                        child: Center(
+                          child: Text(
+                            "Xóa",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          methods.removeAt(index);
+                        });
+                      },
+                      key: Key(methods[index].hashCode.toString()),
+                      child: methodItem(
+                          index: index + 1,
+                          method: methods[index],
+                          key: ValueKey(index)),
+                    ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                   ),
@@ -70,8 +99,10 @@ class _Page4State extends State<Page4> {
     );
   }
 
-  Widget methodItem(int index, Method method) {
+  Widget methodItem(
+      {required int index, required Method method, required Key key}) {
     return Padding(
+      key: key,
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
