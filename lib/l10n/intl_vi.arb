@@ -26,5 +26,15 @@
   "day": "ngày",
   "week": "tuần",
   "month": "tháng",
-  "year": "năm"
+  "year": "năm",
+  "language": "Ngôn ngữ",
+  "account": "Tài khoản",
+  "info": "Thông tin",
+  "report": "Báo cáo",
+  "logOut": "Đăng xuất",
+  "setting": "Cài đặt",
+  "editProfile": "Chỉnh sửa",
+  "ingredient": "Nguyên liệu",
+  "method": "Cách làm",
+  "comment": "Bình luận"
 }

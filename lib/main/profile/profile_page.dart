@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
@@ -152,9 +153,9 @@ class _ProfilePageState extends State<ProfilePage>
                           }),
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white)),
-                      child: const Text(
-                        "Edit Profile",
-                        style: TextStyle(color: Colors.black),
+                      child: Text(
+                        S.current.editProfile,
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ),
                   ),

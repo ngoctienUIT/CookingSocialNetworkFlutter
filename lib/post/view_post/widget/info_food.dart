@@ -1,3 +1,4 @@
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:cooking_social_network/post/view_post/page/comment_page.dart';
 import 'package:cooking_social_network/post/view_post/page/info_food_page.dart';
@@ -41,11 +42,11 @@ class _InfoFoodState extends State<InfoFood> with TickerProviderStateMixin {
               unselectedLabelColor: Colors.grey,
               isScrollable: true,
               indicatorColor: Colors.red,
-              tabs: const [
-                Tab(text: "Thông tin"),
-                Tab(text: "Nguyên liệu"),
-                Tab(text: "Cách làm"),
-                Tab(text: "Bình luận"),
+              tabs: [
+                Tab(text: S.current.info),
+                Tab(text: S.current.ingredient),
+                Tab(text: S.current.method),
+                Tab(text: S.current.comment),
               ]),
         ),
         Expanded(

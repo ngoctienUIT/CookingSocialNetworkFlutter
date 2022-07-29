@@ -22,19 +22,27 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "account": MessageLookupByLibrary.simpleMessage("Account"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "appName": MessageLookupByLibrary.simpleMessage("Cooking app"),
+        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "complete": MessageLookupByLibrary.simpleMessage("Complete"),
         "day": MessageLookupByLibrary.simpleMessage("day"),
         "description": MessageLookupByLibrary.simpleMessage("Description"),
+        "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),
         "female": MessageLookupByLibrary.simpleMessage("Female"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
+        "info": MessageLookupByLibrary.simpleMessage("Information"),
+        "ingredient": MessageLookupByLibrary.simpleMessage("Ingredient"),
         "justFinished": MessageLookupByLibrary.simpleMessage("Just finished"),
+        "language": MessageLookupByLibrary.simpleMessage("Language"),
+        "logOut": MessageLookupByLibrary.simpleMessage("Log out"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "male": MessageLookupByLibrary.simpleMessage("Male"),
+        "method": MessageLookupByLibrary.simpleMessage("Method"),
         "minute": MessageLookupByLibrary.simpleMessage("minute"),
         "month": MessageLookupByLibrary.simpleMessage("month"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
@@ -52,8 +60,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "posts": MessageLookupByLibrary.simpleMessage("Posts"),
         "pressAgainToExit":
             MessageLookupByLibrary.simpleMessage("Press again to exit"),
+        "report": MessageLookupByLibrary.simpleMessage("Report"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "second": MessageLookupByLibrary.simpleMessage("second"),
+        "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "week": MessageLookupByLibrary.simpleMessage("week"),

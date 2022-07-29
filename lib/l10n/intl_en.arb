@@ -26,5 +26,15 @@
   "day": "day",
   "week": "week",
   "month": "month",
-  "year": "year"
+  "year": "year",
+  "language": "Language",
+  "account": "Account",
+  "info": "Information",
+  "report": "Report",
+  "logOut": "Log out",
+  "setting": "Setting",
+  "editProfile": "Edit profile",
+  "ingredient": "Ingredient",
+  "method": "Method",
+  "comment": "Comment"
 }

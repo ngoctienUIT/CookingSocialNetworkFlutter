@@ -278,7 +278,10 @@ class _ProfileSettingState extends State<ProfileSetting> {
           controller: _birthdayController,
           style: const TextStyle(fontSize: 20, height: 1),
           decoration: InputDecoration(
-            suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+            suffixIcon: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 30,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
