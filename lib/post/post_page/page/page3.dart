@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cooking_social_network/model/ingredient.dart';
 import 'package:cooking_social_network/model/post.dart';
 import 'package:flutter/material.dart';

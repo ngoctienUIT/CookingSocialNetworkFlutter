@@ -166,6 +166,39 @@ class PostRepository {
     });
   }
 
+  static Future removeComment(
+      {required String idComment, required String idPost}) async {
+    await FirebaseFirestore.instance
+        .collection("comment")
+        .doc(idComment)
+        .get()
+        .then((value) {
+      Comment comment = Comment.getDataFromMap(snapshot: value);
+      FirebaseFirestore.instance
+          .collection("post")
+          .doc(idPost)
+          .get()
+          .then((value) {
+        Post post = Post.getDataFromSnapshot(snapshot: value);
+        NotifyRepository.removeNotify(
+            notify: Notify(
+                content: comment.content,
+                id: idPost,
+                user: comment.userName,
+                time: comment.time,
+                type: "comment"),
+            username: post.owner);
+
+        post.comments.remove(idComment);
+        FirebaseFirestore.instance
+            .collection("post")
+            .doc(idPost)
+            .update({"comments": post.comments});
+      });
+    });
+    FirebaseFirestore.instance.collection("comment").doc(idComment).delete();
+  }
+
   static Future<bool> checkFavouristComment({required String id}) async {
     bool check = true;
     await FirebaseFirestore.instance
@@ -193,6 +226,7 @@ class PostRepository {
 
     if (await checkFavouristComment(id: id)) {
       favourist.remove(FirebaseAuth.instance.currentUser!.email.toString());
+      // NotifyRepository.addNotify(notify: Notify(content: content, id: id, user: user, time: time, type: type), username: username)
     } else {
       favourist.add(FirebaseAuth.instance.currentUser!.email.toString());
     }

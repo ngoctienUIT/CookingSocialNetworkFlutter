@@ -36,5 +36,8 @@
   "editProfile": "Chỉnh sửa",
   "ingredient": "Nguyên liệu",
   "method": "Cách làm",
-  "comment": "Bình luận"
+  "comment": "Bình luận",
+  "unfavorite": "Bỏ yêu thích",
+  "favorite": "Yêu thích",
+  "delete": "Xóa"
 }

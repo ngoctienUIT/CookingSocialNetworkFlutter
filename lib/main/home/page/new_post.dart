@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/main/home/widget/item_loading.dart';
 import 'package:cooking_social_network/main/home/widget/item_post.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class NewPost extends StatelessWidget {
   const NewPost({Key? key}) : super(key: key);

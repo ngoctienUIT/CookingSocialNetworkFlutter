@@ -92,16 +92,16 @@ class _YourProfilePageState extends State<YourProfilePage>
                             username: widget.userName),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
-                            return itemFollow(user: null);
+                            return itemFollow(user: null, context: context);
                           }
 
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return itemFollow(user: null);
+                            return itemFollow(user: null, context: context);
                           }
                           myuser.User user = myuser.User.getDataFromSnapshot(
                               snapshot: snapshot.requireData);
-                          return itemFollow(user: user);
+                          return itemFollow(user: user, context: context);
                         }),
                     const SizedBox(height: 10),
                     StreamBuilder<DocumentSnapshot>(

@@ -29,8 +29,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "comment": MessageLookupByLibrary.simpleMessage("Bình luận"),
         "complete": MessageLookupByLibrary.simpleMessage("Hoàn thành"),
         "day": MessageLookupByLibrary.simpleMessage("ngày"),
+        "delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "description": MessageLookupByLibrary.simpleMessage("Mô tả"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
+        "favorite": MessageLookupByLibrary.simpleMessage("Yêu thích"),
         "female": MessageLookupByLibrary.simpleMessage("Nữ"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Quên mật khẩu?"),
@@ -66,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting": MessageLookupByLibrary.simpleMessage("Cài đặt"),
         "signUp": MessageLookupByLibrary.simpleMessage("Đăng ký"),
         "skip": MessageLookupByLibrary.simpleMessage("Bỏ qua"),
+        "unfavorite": MessageLookupByLibrary.simpleMessage("Bỏ yêu thích"),
         "week": MessageLookupByLibrary.simpleMessage("tuần"),
         "year": MessageLookupByLibrary.simpleMessage("năm")
       };

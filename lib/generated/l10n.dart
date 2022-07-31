@@ -429,6 +429,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Unfavorite`
+  String get unfavorite {
+    return Intl.message(
+      'Unfavorite',
+      name: 'unfavorite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorite`
+  String get favorite {
+    return Intl.message(
+      'Favorite',
+      name: 'favorite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

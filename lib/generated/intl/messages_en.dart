@@ -29,8 +29,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "complete": MessageLookupByLibrary.simpleMessage("Complete"),
         "day": MessageLookupByLibrary.simpleMessage("day"),
+        "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "description": MessageLookupByLibrary.simpleMessage("Description"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),
+        "favorite": MessageLookupByLibrary.simpleMessage("Favorite"),
         "female": MessageLookupByLibrary.simpleMessage("Female"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
@@ -66,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
+        "unfavorite": MessageLookupByLibrary.simpleMessage("Unfavorite"),
         "week": MessageLookupByLibrary.simpleMessage("week"),
         "year": MessageLookupByLibrary.simpleMessage("year")
       };

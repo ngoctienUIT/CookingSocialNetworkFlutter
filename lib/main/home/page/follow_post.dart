@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cooking_social_network/main/home/widget/react_widget.dart';
+import 'package:cooking_social_network/main/home/widget/item_loading.dart';
+import 'package:cooking_social_network/main/home/widget/item_post.dart';
+import 'package:cooking_social_network/model/user.dart' as myuser;
+import 'package:cooking_social_network/repository/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FollowPost extends StatelessWidget {
   const FollowPost({Key? key}) : super(key: key);
@@ -9,10 +12,16 @@ class FollowPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-        stream: null,
-        builder: (context, snapshot) {
+      stream: UserRepository.getDataUser(
+          username: FirebaseAuth.instance.currentUser!.email.toString()),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Icon(Icons.error);
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return GridView.builder(
-              itemCount: 30,
+              itemCount: 10,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
@@ -20,107 +29,81 @@ class FollowPost extends StatelessWidget {
                 childAspectRatio: 2 / 3,
               ),
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              SizedBox(
-                                height: 150,
-                                width: double.infinity,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(10)),
-                                  child: Image.network(
-                                    index % 2 == 0
-                                        ? "https://i.9mobi.vn/cf/Images/tt/2021/8/20/anh-avatar-dep-39.jpg"
-                                        : "https://inkythuatso.com/uploads/thumbnails/800/2022/03/anh-dai-dien-anime-nam-2-30-15-33-56.jpg",
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "Tên món",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Color.fromRGBO(64, 70, 78, 1),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Spacer(),
-                              Text(
-                                "120 phút",
-                                style: TextStyle(
-                                  color: Color.fromRGBO(160, 164, 167, 1),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                "3/5",
-                                style: TextStyle(
-                                  color: Color.fromRGBO(160, 164, 167, 1),
-                                ),
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellowAccent,
-                                size: 18,
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Spacer(),
-                              reactWidget(
-                                  icon: Icons.favorite_border_rounded,
-                                  color: Colors.red,
-                                  size: 24,
-                                  text: "123"),
-                              const Spacer(),
-                              reactWidget(
-                                  icon: FontAwesomeIcons.comment,
-                                  color: Colors.green,
-                                  text: "123"),
-                              const Spacer(),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return itemLoading();
               });
-        });
+        }
+        myuser.User user =
+            myuser.User.getDataFromSnapshot(snapshot: snapshot.requireData);
+        if (user.following.isNotEmpty) {
+          return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("post")
+                  .where("owner", whereIn: user.following)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Icon(Icons.error);
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return GridView.builder(
+                      itemCount: 10,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        childAspectRatio: 2 / 3,
+                      ),
+                      itemBuilder: (context, index) {
+                        return itemLoading();
+                      });
+                }
+
+                List<String> docs = [];
+                for (var element in snapshot.requireData.docs) {
+                  docs.add(element.id);
+                }
+
+                if (docs.isNotEmpty) {
+                  return GridView.builder(
+                      itemCount: docs.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        childAspectRatio: 2 / 3,
+                      ),
+                      itemBuilder: (context, index) {
+                        return ItemPost(id: docs[index]);
+                      });
+                } else {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Center(
+                      child: Text(
+                        "Những người bạn theo dõi chưa có bất kỳ bài viết nào!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
+                      ),
+                    ),
+                  );
+                }
+              });
+        } else {
+          return const Center(
+            child: Text(
+              "Bạn chưa theo dõi ai!",
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+          );
+        }
+      },
+    );
   }
 }

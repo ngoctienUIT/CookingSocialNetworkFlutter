@@ -36,5 +36,8 @@
   "editProfile": "Edit profile",
   "ingredient": "Ingredient",
   "method": "Method",
-  "comment": "Comment"
+  "comment": "Comment",
+  "unfavorite": "Unfavorite",
+  "favorite": "Favorite",
+  "delete": "Delete"
 }
