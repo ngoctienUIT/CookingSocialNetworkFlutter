@@ -39,5 +39,10 @@
   "comment": "Bình luận",
   "unfavorite": "Bỏ yêu thích",
   "favorite": "Yêu thích",
-  "delete": "Xóa"
+  "delete": "Xóa",
+  "copy": "Sao chép",
+  "share": "Chia sẻ",
+  "edit": "Chỉnh sửa",
+  "follow": "Theo dõi",
+  "unfollow": "Hủy theo dõi"
 }

@@ -83,7 +83,15 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    AllSearch(query: search),
+                    AllSearch(
+                      query: search,
+                      toUserPage: () {
+                        _tabController.animateTo(1);
+                      },
+                      toPostPage: () {
+                        _tabController.animateTo(2);
+                      },
+                    ),
                     UserSearch(query: search),
                     PostSearch(query: search)
                   ],

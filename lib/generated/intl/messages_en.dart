@@ -28,12 +28,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("Cooking app"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "complete": MessageLookupByLibrary.simpleMessage("Complete"),
+        "copy": MessageLookupByLibrary.simpleMessage("Copy"),
         "day": MessageLookupByLibrary.simpleMessage("day"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "description": MessageLookupByLibrary.simpleMessage("Description"),
+        "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),
         "favorite": MessageLookupByLibrary.simpleMessage("Favorite"),
         "female": MessageLookupByLibrary.simpleMessage("Female"),
+        "follow": MessageLookupByLibrary.simpleMessage("Follow"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
@@ -66,9 +69,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "second": MessageLookupByLibrary.simpleMessage("second"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
+        "share": MessageLookupByLibrary.simpleMessage("Share"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "unfavorite": MessageLookupByLibrary.simpleMessage("Unfavorite"),
+        "unfollow": MessageLookupByLibrary.simpleMessage("Unfollow"),
         "week": MessageLookupByLibrary.simpleMessage("week"),
         "year": MessageLookupByLibrary.simpleMessage("year")
       };

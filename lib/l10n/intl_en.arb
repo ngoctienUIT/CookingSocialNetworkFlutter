@@ -39,5 +39,10 @@
   "comment": "Comment",
   "unfavorite": "Unfavorite",
   "favorite": "Favorite",
-  "delete": "Delete"
+  "delete": "Delete",
+  "copy": "Copy",
+  "share": "Share",
+  "edit": "Edit",
+  "follow": "Follow",
+  "unfollow": "Unfollow"
 }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
 import 'package:cooking_social_network/model/info.dart';
@@ -137,8 +138,8 @@ class _YourProfilePageState extends State<YourProfilePage>
                               ),
                               child: Text(
                                 user.following.contains(widget.userName)
-                                    ? "Hủy Follow"
-                                    : "Follow",
+                                    ? S.current.unfollow
+                                    : S.current.follow,
                                 style: const TextStyle(fontSize: 15),
                               ),
                             ),
@@ -187,8 +188,30 @@ class _YourProfilePageState extends State<YourProfilePage>
                       }
                       myuser.User user = myuser.User.getDataFromSnapshot(
                           snapshot: snapshot.requireData);
+
+                      double height;
+                      switch (_tabController.index) {
+                        case 0:
+                          height = user.post.length.toDouble();
+                          break;
+                        case 1:
+                          height = user.favourites.length.toDouble();
+                          break;
+                        default:
+                          height = user.post.length.toDouble();
+                      }
+
+                      height =
+                          (height % 3 == 0 ? height / 3 : (height / 3) + 1) *
+                              (MediaQuery.of(context).size.width / 3) *
+                              1.6;
+
+                      if (height == 0) {
+                        height = 100;
+                      }
+
                       return SizedBox(
-                        height: double.maxFinite,
+                        height: height,
                         child:
                             TabBarView(controller: _tabController, children: [
                           listPost(user: user, index: 0),

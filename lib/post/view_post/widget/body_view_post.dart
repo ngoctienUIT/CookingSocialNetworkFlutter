@@ -1,11 +1,14 @@
 import 'package:cooking_social_network/model/post.dart';
+import 'package:cooking_social_network/post/view_post/widget/custom_popup_menu.dart';
 import 'package:cooking_social_network/post/view_post/widget/floating_button_icon.dart';
 import 'package:cooking_social_network/post/view_post/widget/info_food.dart';
 import 'package:cooking_social_network/repository/post_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
+Widget bodyViewPost(BuildContext context, {Post? post, required bool check}) {
   return Scaffold(
     body: SafeArea(
       child: Stack(
@@ -38,12 +41,18 @@ Scaffold bodyViewPost(BuildContext context, {Post? post, required bool check}) {
                       iconColor: Colors.red, action: () {
                     Navigator.pop(context);
                   }),
-                  floatingButtonIcon(context,
-                      right: 10,
-                      top: 10,
-                      iconData: Icons.more_horiz_rounded,
-                      iconColor: Colors.red,
-                      action: () {}),
+                  post == null
+                      ? floatingButtonIcon(context,
+                          right: 10,
+                          top: 10,
+                          iconData: FontAwesomeIcons.ellipsis,
+                          iconColor: Colors.red,
+                          action: () {})
+                      : (post.owner ==
+                              FirebaseAuth.instance.currentUser!.email.toString()
+                          ? Positioned(
+                              right: 10, top: 10, child: customPopupMenu())
+                          : const SizedBox.shrink()),
                   floatingButtonIcon(context,
                       right: 10,
                       bottom: 25,

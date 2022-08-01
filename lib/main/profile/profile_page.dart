@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/main/profile/widget/item_follow.dart';
 import 'package:cooking_social_network/main/profile/widget/list_post.dart';
+import 'package:cooking_social_network/main/profile/widget/loading_post.dart';
 import 'package:cooking_social_network/model/info.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 import 'package:cooking_social_network/repository/user_repository.dart';
@@ -10,7 +11,6 @@ import 'package:cooking_social_network/setting/page/profile_setting.dart';
 import 'package:cooking_social_network/setting/setting_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -200,9 +200,28 @@ class _ProfilePageState extends State<ProfilePage>
 
                     myuser.User user = myuser.User.getDataFromSnapshot(
                         snapshot: snapshot.requireData);
+                    double height;
+                    switch (_tabController.index) {
+                      case 0:
+                        height = user.post.length.toDouble();
+                        break;
+                      case 1:
+                        height = user.favourites.length.toDouble();
+                        break;
+                      default:
+                        height = user.post.length.toDouble();
+                    }
+
+                    height = (height % 3 == 0 ? height / 3 : (height / 3) + 1) *
+                        (MediaQuery.of(context).size.width / 3) *
+                        1.6;
+
+                    if (height == 0) {
+                      height = 100;
+                    }
 
                     return SizedBox(
-                      height: double.maxFinite,
+                      height: height,
                       child: TabBarView(controller: _tabController, children: [
                         listPost(user: user, index: 0),
                         listPost(user: user, index: 1),
@@ -214,40 +233,6 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ],
-    );
-  }
-
-  GridView loadingPost() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 9,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
-        childAspectRatio: 2 / 3,
-      ),
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

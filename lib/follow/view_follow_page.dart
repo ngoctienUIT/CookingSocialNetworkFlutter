@@ -1,4 +1,4 @@
-import 'package:cooking_social_network/follow/view_follower.dart';
+import 'package:cooking_social_network/follow/view_follow.dart';
 import 'package:flutter/material.dart';
 import 'package:cooking_social_network/model/user.dart' as myuser;
 

@@ -28,12 +28,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("Ứng dụng nấu ăn"),
         "comment": MessageLookupByLibrary.simpleMessage("Bình luận"),
         "complete": MessageLookupByLibrary.simpleMessage("Hoàn thành"),
+        "copy": MessageLookupByLibrary.simpleMessage("Sao chép"),
         "day": MessageLookupByLibrary.simpleMessage("ngày"),
         "delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "description": MessageLookupByLibrary.simpleMessage("Mô tả"),
+        "edit": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
         "favorite": MessageLookupByLibrary.simpleMessage("Yêu thích"),
         "female": MessageLookupByLibrary.simpleMessage("Nữ"),
+        "follow": MessageLookupByLibrary.simpleMessage("Theo dõi"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Quên mật khẩu?"),
         "hours": MessageLookupByLibrary.simpleMessage("giờ"),
@@ -66,9 +69,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("Tìm kiếm"),
         "second": MessageLookupByLibrary.simpleMessage("giây"),
         "setting": MessageLookupByLibrary.simpleMessage("Cài đặt"),
+        "share": MessageLookupByLibrary.simpleMessage("Chia sẻ"),
         "signUp": MessageLookupByLibrary.simpleMessage("Đăng ký"),
         "skip": MessageLookupByLibrary.simpleMessage("Bỏ qua"),
         "unfavorite": MessageLookupByLibrary.simpleMessage("Bỏ yêu thích"),
+        "unfollow": MessageLookupByLibrary.simpleMessage("Hủy theo dõi"),
         "week": MessageLookupByLibrary.simpleMessage("tuần"),
         "year": MessageLookupByLibrary.simpleMessage("năm")
       };

@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_social_network/generated/l10n.dart';
 import 'package:cooking_social_network/model/comment.dart';
@@ -55,12 +56,9 @@ Widget commentItem(
                 duration: const Duration(milliseconds: 100),
                 animateMenuItems: true,
                 blurBackgroundColor: Colors.black54,
-                openWithTap:
-                    false, // Open Focused-Menu on Tap rather than Long Press
-                menuOffset:
-                    10.0, // Offset value to show menuItem from the selected item
-                bottomOffsetHeight:
-                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                openWithTap: false,
+                menuOffset: 10.0,
+                bottomOffsetHeight: 80.0,
                 menuItems: [
                   FocusedMenuItem(
                       title: Text(
@@ -75,18 +73,40 @@ Widget commentItem(
                         PostRepository.favouristComment(id: idComment);
                       }),
                   FocusedMenuItem(
-                      title: Text(
-                        S.current.delete,
-                        style: const TextStyle(color: Colors.redAccent),
-                      ),
+                      title: Text(S.current.copy),
                       trailingIcon: const Icon(
-                        Icons.delete,
-                        color: Colors.redAccent,
+                        Icons.copy_rounded,
+                        color: Colors.green,
                       ),
-                      onPressed: () {
-                        PostRepository.removeComment(
-                            idComment: idComment, idPost: idPost);
+                      onPressed: () async {
+                        await FlutterClipboard.copy(comment.content);
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Sao chép thành công",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
                       }),
+                  if (comment.userName ==
+                          FirebaseAuth.instance.currentUser!.email.toString() ||
+                      username ==
+                          FirebaseAuth.instance.currentUser!.email.toString())
+                    FocusedMenuItem(
+                        title: Text(
+                          S.current.delete,
+                          style: const TextStyle(color: Colors.redAccent),
+                        ),
+                        trailingIcon: const Icon(
+                          Icons.delete_rounded,
+                          color: Colors.redAccent,
+                        ),
+                        onPressed: () {
+                          PostRepository.removeComment(
+                              idComment: idComment, idPost: idPost);
+                        }),
                 ],
                 onPressed: () {},
                 child: Card(
@@ -98,7 +118,8 @@ Widget commentItem(
                       children: [
                         InkWell(
                           onTap: () {
-                            toProfilePage(username: username, context: context);
+                            toProfilePage(
+                                username: comment.userName, context: context);
                           },
                           child: SizedBox(
                               width: 45,
@@ -114,7 +135,8 @@ Widget commentItem(
                             InkWell(
                               onTap: () {
                                 toProfilePage(
-                                    username: username, context: context);
+                                    username: comment.userName,
+                                    context: context);
                               },
                               child: Text(
                                 info.name,

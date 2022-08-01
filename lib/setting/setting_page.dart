@@ -6,6 +6,7 @@ import 'package:cooking_social_network/setting/page/profile_setting.dart';
 import 'package:cooking_social_network/setting/widget/item_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -114,7 +115,16 @@ class _SettingPageState extends State<SettingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RadioListTile<int>(
-                    title: const Text("Tiếng Việt"),
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          const Text("Tiếng Việt"),
+                          const Spacer(),
+                          Image.asset("assets/images/vietnam.png", width: 50)
+                        ],
+                      ),
+                    ),
                     value: 0,
                     groupValue: language,
                     onChanged: (value) {
@@ -128,7 +138,16 @@ class _SettingPageState extends State<SettingPage> {
                     },
                   ),
                   RadioListTile<int>(
-                    title: const Text("Tiếng Anh"),
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          const Text("Tiếng Anh"),
+                          const Spacer(),
+                          Image.asset("assets/images/UK.png", width: 50)
+                        ],
+                      ),
+                    ),
                     value: 1,
                     groupValue: language,
                     onChanged: (value) {
